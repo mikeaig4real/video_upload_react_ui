@@ -29,7 +29,7 @@ export type User = z.infer<typeof userSchema>;
 export type OptionalUser = Partial<User>;
 
 export type UserStateType = {
-  user: Pick<User, "id" | "email" | "username"> | null;
+  user: User | null;
   setUser: (user: User) => void;
   clearUser: () => void;
 };
