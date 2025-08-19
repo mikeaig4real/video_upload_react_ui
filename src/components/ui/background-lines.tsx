@@ -16,7 +16,7 @@ export const BackgroundLines = ({
   return (
     <div
       className={cn(
-        "h-screen w-full overflow-hidden bg-white dark:bg-black",
+        "h-dvh safe-top w-screen overflow-hidden bg-white dark:bg-black",
         className
       )}
     >
