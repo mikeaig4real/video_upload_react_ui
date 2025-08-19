@@ -11,6 +11,8 @@ const {
   VITE_ENV,
 } = import.meta.env;
 
+// todo: implement some validation with zod
+
 export const DEFAULT_THEME = VITE_DEFAULT_THEME;
 export const THEME_KEY = VITE_THEME_KEY;
 export const DEFAULT_FORM_TYPE = VITE_DEFAULT_FORM_TYPE;
