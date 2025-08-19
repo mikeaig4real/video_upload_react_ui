@@ -1,0 +1,40 @@
+import { logInSchema } from "@/types/getting-started";
+import { CustomForm, type HandleSubmitType } from "@/components/CustomForm";
+
+const formFields: {
+  name: "username" | "password";
+  label: string;
+  placeholder: string;
+  description: string;
+}[] = [
+  {
+    name: "username",
+    label: "email",
+    placeholder: "sonic_fox@mkx.com",
+    description: "your email address",
+  },
+  {
+    name: "password",
+    label: "password",
+    placeholder: "**********",
+    description: "your password",
+  },
+];
+
+const defaultValues = {
+  username: "",
+  password: "",
+};
+
+export function LogInForm ( { handleSubmit }: {
+  handleSubmit: HandleSubmitType
+}) {
+  return (
+    <CustomForm
+      handleSubmit={handleSubmit}
+      zodSchema={logInSchema}
+      defaultValues={defaultValues}
+      formFields={formFields}
+    />
+  );
+}

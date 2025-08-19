@@ -1,0 +1,90 @@
+import { AppSidebar } from "@/components/AppSideBar";
+import { SiteHeader } from "@/components/SiteHeader";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import type Player from "video.js/dist/types/player";
+import VideoPlayer from "@/components/VideoPlayer";
+import { useStore } from "@/store/useStore";
+import { Outlet, useLocation } from "react-router";
+import { useEffect } from "react";
+import { log } from "@/utils/logger";
+
+const Dashboard = () => {
+  const {
+    isDialogOpen,
+    setIsDialogOpen,
+    activeVideo,
+    playerOptions,
+    playerState,
+    setPlayerState,
+    navMain,
+    setNavMainActive,
+    setSiteHeaderText,
+  } = useStore();
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const nav = navMain.find( ( n ) => n.url === pathname );
+    if ( !nav ) return;
+    setNavMainActive(nav.id);
+    setSiteHeaderText(nav.description);
+  }, [navMain, pathname, setNavMainActive, setSiteHeaderText]);
+  const handlePlayerReady = (player: Player) => {
+    log("Player is ready:", player);
+    setPlayerState({ ...playerState, player, status: "ready" });
+    player.on("waiting", () => {
+      log("Player is waiting");
+      setPlayerState({ ...playerState, status: "waiting" });
+    });
+    player.on("dispose", () => {
+      log("Player will dispose");
+      setPlayerState({ ...playerState, status: "dispose" });
+    });
+  };
+  return (
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex flex-1 flex-col max-h-svh scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-black overflow-hidden overflow-y-auto scrollbar-track-gray-200 ">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <Outlet />
+            </div>
+          </div>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-4xl w-full p-0">
+            <DialogHeader className="p-3 pb-0">
+              <DialogTitle className="text-xl font-semibold">
+                {activeVideo?.name || "video"}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="p-3 pt-2">
+              {activeVideo && (
+                <VideoPlayer
+                  options={playerOptions}
+                  onReady={handlePlayerReady}
+                />
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+};
+
+export default Dashboard;
+
