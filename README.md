@@ -2,6 +2,10 @@
 
 A modern video upload, management + widget(library share) UI built with React, TypeScript, Vite, Zustand, and Tailwind CSS.
 
+## Live Preview
+
+Access the full app and all routes here: [Video Hub Preview](https://video-hub-git-no-protected-routes-mikeaig4reals-projects.vercel.app/)
+
 ## Features
 
 - Video upload with client-side validation
@@ -63,9 +67,7 @@ npm run preview
 
 Create a `.env` file in the root directory and set your API base URL:
 
-```
 VITE_API_BASE_URL=https://your-api-url.com/api
-```
 
 ## Deployment
 
