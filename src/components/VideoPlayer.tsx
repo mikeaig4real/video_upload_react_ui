@@ -1,3 +1,4 @@
+import { log } from "@/utils/logger";
 import { useEffect, useRef } from "react";
 import videojs from "video.js";
 import type Player from "video.js/dist/types/player";
@@ -25,7 +26,7 @@ export const VideoJS: React.FC<VideoJSProps> = ({ options, onReady }) => {
         videoElement,
         options,
         function onPlayerReady() {
-          videojs.log("player is ready");
+          log("player is ready");
           onReady?.(player);
         }
       ));
