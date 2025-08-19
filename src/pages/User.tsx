@@ -73,7 +73,7 @@ export default function User() {
             <div className="relative group">
               <Avatar className="h-24 w-24">
                 <AvatarImage
-                  src={profile.avatar || "/placeholder.svg"}
+                  src={profile.avatar || ""}
                   alt={profile.username}
                 />
                 <AvatarFallback className="text-lg">
