@@ -67,9 +67,7 @@ npm run preview
 
 Create a `.env` file in the root directory and set your API base URL:
 
-```
 VITE_API_BASE_URL=https://your-api-url.com/api
-```
 
 ## Deployment
 
