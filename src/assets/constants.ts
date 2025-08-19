@@ -1,14 +1,14 @@
 import { convertSize } from "@/utils/conversions";
 const {
-  VITE_APP_NAME,
-  VITE_DEFAULT_THEME,
-  VITE_THEME_KEY,
-  VITE_DEFAULT_FORM_TYPE,
+  VITE_APP_NAME = "Video_Hub",
+  VITE_DEFAULT_THEME = "system",
+  VITE_THEME_KEY = "vite-ui-theme",
+  VITE_DEFAULT_FORM_TYPE = "register",
   VITE_API_TOKEN_NAME,
   VITE_PERSIST_KEY,
-  VITE_REDIRECT_URL,
+  VITE_REDIRECT_URL = "/get-started",
   VITE_API_BASE_URL,
-  VITE_ENV,
+  VITE_ENV = "development",
 } = import.meta.env;
 
 // todo: implement some validation with zod
