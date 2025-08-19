@@ -1,6 +1,6 @@
 # Video Hub
 
-A modern video upload and management UI built with React, TypeScript, Vite, Zustand, and Tailwind CSS.
+A modern video upload, management + widget(library share) UI built with React, TypeScript, Vite, Zustand, and Tailwind CSS.
 
 ## Features
 
