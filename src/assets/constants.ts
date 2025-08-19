@@ -8,7 +8,7 @@ const {
   VITE_PERSIST_KEY,
   VITE_REDIRECT_URL = "/get-started",
   VITE_API_BASE_URL,
-  VITE_ENV = "development",
+  VITE_ENV,
 } = import.meta.env;
 
 // todo: implement some validation with zod
