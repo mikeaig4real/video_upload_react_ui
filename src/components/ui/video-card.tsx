@@ -70,6 +70,7 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
       type: file.type,
       lastModified: file.lastModified,
       metadata: file.metadata,
+      editedName: file.editedName,
     };
     const sources = [
       { src: videoObject.metadata!.url, type: videoObject.type! },
