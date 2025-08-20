@@ -28,8 +28,8 @@ const Dashboard = () => {
   } = useStore();
   const { pathname } = useLocation();
   useEffect(() => {
-    const nav = navMain.find( ( n ) => n.url === pathname );
-    if ( !nav ) return;
+    const nav = navMain.find((n) => n.url === pathname);
+    if (!nav) return;
     setNavMainActive(nav.id);
     setSiteHeaderText(nav.description);
   }, [navMain, pathname, setNavMainActive, setSiteHeaderText]);
@@ -65,7 +65,7 @@ const Dashboard = () => {
           </div>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-4xl w-full p-0">
+          <DialogContent className="max-w-4xl w-full p-0 dark:bg-black">
             <DialogHeader className="p-3 pb-0">
               <DialogTitle className="text-xl font-semibold">
                 {activeVideo?.editedName || activeVideo?.name || "video"}
@@ -87,4 +87,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
