@@ -52,9 +52,11 @@ export default function User() {
   };
 
   const getInitials = (user: User) => {
-    return `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(
-      0
-    )}`.toUpperCase();
+    return user?.firstName && user?.lastName
+      ? `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(
+          0
+        )}`.toUpperCase()
+      : user.username?.charAt(0).toUpperCase() || "JD";
   };
 
   return (

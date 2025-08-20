@@ -1,5 +1,5 @@
 import type { UploadedVideo } from "@/types/uploaded_video";
-import hash from "object-hash"
+import hash from "object-hash";
 
 export function formatDuration(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -9,17 +9,19 @@ export function formatDuration(seconds: number): string {
   return `${paddedMins}:${paddedSecs}`;
 }
 
-export const getVideoPixel = ( { width, height } : {
+export const getVideoPixel = ({
+  width,
+  height,
+}: {
   width: number;
   height: number;
-} ) =>
-{
+}) => {
   let label = `${height}p`;
   if (width >= 3840) label = "4K";
   if (width >= 1920) label = "1080p";
-  if ( width >= 1280 ) label = "720p";
+  if (width >= 1280) label = "720p";
   return label;
-}
+};
 
 export type DP = "240p" | "360p" | "480p" | "720p" | "1080p" | "4K";
 export function generateVideoThumbnail(
@@ -54,9 +56,6 @@ export function generateVideoThumbnail(
       height = video.videoHeight;
       duration = video.duration;
       label = getVideoPixel({ width, height });
-      if (width >= 3840) label = "4K";
-      if (width >= 1920) label = "1080p";
-      if (width >= 1280) label = "720p";
       video.currentTime = time;
     });
 
@@ -97,19 +96,15 @@ export function generateVideoThumbnail(
   });
 }
 
-
 export const checkVideoDuplicate = (
   uploaded: UploadedVideo,
   existing: UploadedVideo[]
-) =>
-{
+) => {
   if (existing.some((video) => video.id === uploaded.id)) return true;
   return false;
 };
 
-export const makeVideoHash = (
-  file: UploadedVideo
-): string => {
+export const makeVideoHash = (file: UploadedVideo): string => {
   return hash({
     name: file.name,
     lastModified: file.lastModified,
