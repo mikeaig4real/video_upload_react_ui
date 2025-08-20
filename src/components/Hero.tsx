@@ -16,21 +16,23 @@ const Hero = () => {
     };
   };
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center select-none">
-      <p className="text-neutral-600 dark:text-neutral-200 text-md sm:text-xl">
+    <div className="safe-top h-dvh flex flex-col items-center justify-center select-none px-4">
+      <p className="text-neutral-600 dark:text-neutral-200 text-lg sm:text-xl md:text-2xl lg:text-3xl text-center mb-2">
         {hero.heading}
       </p>
-      <TypewriterEffectSmooth words={hero.words} />
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4">
+      <div className="w-full flex justify-center mb-4">
+        <TypewriterEffectSmooth words={hero.words} />
+      </div>
+      <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 space-x-0 md:space-x-4 w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto justify-center items-center">
         {hero.buttons.map(({ text, to, className }, index) => {
-          const { modTo, modText } = modValues( { to, text } );
+          const { modTo, modText } = modValues({ to, text });
           return (
             <Button
-              size={"lg"}
+              size="lg"
               key={`btn-${index}`}
               onClick={() => navigate(modTo)}
               className={cn(
-                "w-40 h-10 rounded-md text-sm cursor-pointer",
+                "w-full md:w-40 h-12 rounded-lg text-base sm:text-lg cursor-pointer",
                 className
               )}
             >
