@@ -3,7 +3,9 @@ import { ModeToggle } from "@/components/ModeToggle";
 import AppRoutes from "@/routes/AppRoutes";
 import { BackgroundLines } from "@/components/ui/background-lines";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
+
 function App() {
   return (
     <BackgroundLines>
@@ -16,6 +18,7 @@ function App() {
         <ModeToggle />
       </div>
       <Toaster expand={true} closeButton />
+      <Analytics />
     </BackgroundLines>
   );
 }
