@@ -9,8 +9,7 @@ import { useStore } from "@/store/useStore";
 import { useNavigate } from "react-router";
 
 export function NavMain() {
-  const { navMain, navMainActive } =
-    useStore();
+  const { navMain, navMainActive } = useStore();
   const navigate = useNavigate();
   return (
     <SidebarGroup>
@@ -31,7 +30,9 @@ export function NavMain() {
                 hover:bg-primary/90
                 hover:text-primary-foreground
                 min-w-8 
-                duration-200 
+                duration-200
+                py-6
+                my-2
                 ease-linear
                 `}
                 tooltip={item.title}
