@@ -43,6 +43,7 @@ export const FileUpload = () => {
   const { uploadedFiles, setUploadedFiles } = useStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = async (newFiles: UploadedVideo[]) => {
+    if ( !newFiles.length ) return;
     toast.loading("Processing file(s)...", {
       id: toastId,
     });
@@ -66,12 +67,12 @@ export const FileUpload = () => {
         });
         return;
       }
-      file.editedName = file.name;
+      file.title = file.name;
     }
+      toast.success("Processed & added files.", {
+        id: toastId,
+      });
     setUploadedFiles([...uploadedFiles, ...newFiles]);
-    toast.success("Processed & added files.", {
-      id: toastId,
-    });
   };
 
   const handleClick = () => {

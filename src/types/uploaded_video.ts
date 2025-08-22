@@ -4,7 +4,7 @@ import { z } from "zod";
 export type UploadedVideo = File & {
   id?: string | number;
   isGenerating?: boolean;
-  editedName?: string;
+  title?: string;
   path?: string;
   relativePath?: string;
   metadata?: {
@@ -18,13 +18,12 @@ export type UploadedVideo = File & {
   };
 };
 
-
 export type OptionalUploadedVideo = Partial<UploadedVideo>;
 
 export type VideoSource = {
-    src: string;
-    type: string;
-}
+  src: string;
+  type: string;
+};
 
 export const videoFileSchema = z.object({
   file: z
@@ -36,7 +35,3 @@ export const videoFileSchema = z.object({
       message: `File is larger than ${VIDEO_SPECS.maxSize} bytes`,
     }),
 });
-
-
-
-
