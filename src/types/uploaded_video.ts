@@ -15,6 +15,7 @@ export type UploadedVideo = File & {
     width: number;
     height: number;
     label: string | DP;
+    upload_hash: string;
   };
 };
 

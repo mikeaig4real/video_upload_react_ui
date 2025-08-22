@@ -30,7 +30,7 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
     setIsDialogOpen,
   } = useStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [title, settitle] = useState(file.title);
+  const [title, setTitle] = useState(file.title);
   const [fileName, setFileName] = useState(file.title);
   const handleSave = () => {
     if (!title) {
@@ -49,7 +49,7 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
   };
 
   const handleCancel = () => {
-    settitle(fileName);
+    setTitle(fileName);
     setIsEditing(false);
   };
 
@@ -119,7 +119,7 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
               >
                 <Input
                   value={title}
-                  onChange={(e) => settitle(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                   onKeyDown={handleKeyDown}
                   className="text-lg font-semibold h-8 px-2"
                   onClick={(e) => e.stopPropagation()}
