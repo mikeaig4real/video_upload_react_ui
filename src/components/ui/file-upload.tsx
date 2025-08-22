@@ -12,8 +12,7 @@ import { convertSize } from "@/utils/conversions";
 import { videoFileSchema, type UploadedVideo } from "@/types/uploaded_video";
 import {
   checkVideoDuplicate,
-  generateVideoThumbnail,
-  makeVideoHash,
+  generateVideoMetadata,
 } from "@/utils/video_file";
 import { log } from "@/utils/logger";
 
@@ -43,6 +42,7 @@ export const FileUpload = () => {
   const { uploadedFiles, setUploadedFiles } = useStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = async (newFiles: UploadedVideo[]) => {
+    if (!newFiles.length) return;
     toast.loading("Processing file(s)...", {
       id: toastId,
     });
@@ -54,9 +54,7 @@ export const FileUpload = () => {
         });
         return;
       }
-      const metadata = await generateVideoThumbnail(file);
-      file.metadata = metadata;
-      file.id = makeVideoHash(file);
+      await generateVideoMetadata(file);
       const isDuplicate = !uploadedFiles.length
         ? false
         : checkVideoDuplicate(file, uploadedFiles);
@@ -66,12 +64,12 @@ export const FileUpload = () => {
         });
         return;
       }
-      file.editedName = file.name;
+      file.title = file.name;
     }
-    setUploadedFiles([...uploadedFiles, ...newFiles]);
     toast.success("Processed & added files.", {
       id: toastId,
     });
+    setUploadedFiles([...uploadedFiles, ...newFiles]);
   };
 
   const handleClick = () => {

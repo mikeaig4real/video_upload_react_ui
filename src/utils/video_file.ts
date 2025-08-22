@@ -24,18 +24,10 @@ export const getVideoPixel = ({
 };
 
 export type DP = "240p" | "360p" | "480p" | "720p" | "1080p" | "4K";
-export function generateVideoThumbnail(
+export function generateVideoMetadata(
   file: UploadedVideo,
   captureTime: number = 1
-): Promise<{
-  url: string;
-  thumbnail: string;
-  duration: number;
-  durationStr: string;
-  width: number;
-  height: number;
-  label: string | DP;
-}> {
+): Promise<UploadedVideo> {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file as Blob);
     const video = document.createElement("video");
@@ -51,7 +43,7 @@ export function generateVideoThumbnail(
     let label = "";
 
     video.addEventListener("loadeddata", () => {
-      const time = Math.min(captureTime, video.duration - 0.5);
+      const time = Math.min(captureTime, Math.floor(video.duration / 5));
       width = video.videoWidth;
       height = video.videoHeight;
       duration = video.duration;
@@ -71,12 +63,8 @@ export function generateVideoThumbnail(
 
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const thumbnail = canvas.toDataURL("image/png");
-
-      // URL.revokeObjectURL(url);
-      video.remove();
-      canvas.remove();
-      resolve({
+      const thumbnail = canvas.toDataURL( "image/png" );
+      file.metadata = {
         url,
         thumbnail,
         duration,
@@ -84,7 +72,15 @@ export function generateVideoThumbnail(
         width,
         height,
         label,
-      });
+        upload_hash: ""
+      };
+      const upload_hash = makeVideoHash(file);
+      file.metadata.upload_hash = upload_hash;
+      file.id = upload_hash;
+      // URL.revokeObjectURL(url);
+      video.remove();
+      canvas.remove();
+      resolve(file);
     });
 
     video.addEventListener("error", (err) => {
@@ -104,13 +100,12 @@ export const checkVideoDuplicate = (
   return false;
 };
 
-export const makeVideoHash = (file: UploadedVideo): string => {
+export function makeVideoHash(file: UploadedVideo): string {
   return hash({
-    name: file.name,
     lastModified: file.lastModified,
     size: file.size,
     type: file.type,
     width: file.metadata?.width,
     height: file.metadata?.height,
   });
-};
+}

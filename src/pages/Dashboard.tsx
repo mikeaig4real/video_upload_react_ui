@@ -68,7 +68,7 @@ const Dashboard = () => {
           <DialogContent className="max-w-4xl w-full p-0 dark:bg-black">
             <DialogHeader className="p-3 pb-0">
               <DialogTitle className="text-xl font-semibold">
-                {activeVideo?.editedName || activeVideo?.name || "video"}
+                {activeVideo?.title || activeVideo?.name || "video"}
               </DialogTitle>
             </DialogHeader>
             <div className="p-3 pt-2">

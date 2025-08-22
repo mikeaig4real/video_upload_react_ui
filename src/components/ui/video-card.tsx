@@ -30,28 +30,26 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
     setIsDialogOpen,
   } = useStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState(file.editedName);
-  const [fileName, setFileName] = useState(file.editedName);
-  const handleSave = () =>
-  {
-    if ( !editedName )
-    {
-      toast.error("File must have a name")
+  const [title, setTitle] = useState(file.title);
+  const [fileName, setFileName] = useState(file.title);
+  const handleSave = () => {
+    if (!title) {
+      toast.error("File must have a name");
       return;
-    };
+    }
     const modifiedUploadedFiles = uploadedFiles.map((upload) => {
       if (upload.id === file.id) {
-        upload.editedName = editedName;
+        upload.title = title;
       }
       return upload;
     });
     setUploadedFiles(modifiedUploadedFiles);
-    setFileName(editedName);
+    setFileName(title);
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setEditedName(fileName);
+    setTitle(fileName);
     setIsEditing(false);
   };
 
@@ -70,7 +68,7 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
       type: file.type,
       lastModified: file.lastModified,
       metadata: file.metadata,
-      editedName: file.editedName,
+      title: file.title,
     };
     const sources = [
       { src: videoObject.metadata!.url, type: videoObject.type! },
@@ -120,8 +118,8 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
                 className="flex items-center gap-1 flex-1"
               >
                 <Input
-                  value={editedName}
-                  onChange={(e) => setEditedName(e.target.value)}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   onKeyDown={handleKeyDown}
                   className="text-lg font-semibold h-8 px-2"
                   onClick={(e) => e.stopPropagation()}
