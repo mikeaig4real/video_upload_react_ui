@@ -63,7 +63,7 @@ export function generateVideoMetadata(
 
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const thumbnail = canvas.toDataURL( "image/png" );
+      const thumbnail = canvas.toDataURL("image/png");
       file.metadata = {
         url,
         thumbnail,
@@ -72,11 +72,12 @@ export function generateVideoMetadata(
         width,
         height,
         label,
-        upload_hash: ""
+        uploadHash: "",
       };
-      const upload_hash = makeVideoHash(file);
-      file.metadata.upload_hash = upload_hash;
-      file.id = upload_hash;
+      const uploadHash = makeVideoHash(file);
+      file.metadata.uploadHash = uploadHash;
+      file.id = uploadHash;
+      file.uploadStatus = "idle";
       // URL.revokeObjectURL(url);
       video.remove();
       canvas.remove();

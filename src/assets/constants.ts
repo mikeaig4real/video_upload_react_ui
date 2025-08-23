@@ -28,3 +28,5 @@ export const VIDEO_SPECS = {
   },
   maxSize: convertSize(10, "MB", "B"),
 };
+export const VIDEO_FORMAT_REGEX = /video\/(mp4|mov|wmv|flv|avi|avchd|webm|mkv|mpeg-2|3gp)$/i;
+export const MAX_VIDEO_SIZE = convertSize(10, "MB", "B"); // 10MB in bytes

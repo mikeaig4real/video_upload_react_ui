@@ -1,12 +1,19 @@
 import { VIDEO_SPECS } from "@/assets/constants";
 import type { DP } from "@/utils/video_file";
 import { z } from "zod";
+export type UploadStatus =
+  | "idle"
+  | "uploading"
+  | "processing"
+  | "completed"
+  | "error";
 export type UploadedVideo = File & {
   id?: string | number;
   isGenerating?: boolean;
   title?: string;
   path?: string;
   relativePath?: string;
+  uploadStatus: UploadStatus;
   metadata?: {
     url: string;
     thumbnail: string;
@@ -15,7 +22,7 @@ export type UploadedVideo = File & {
     width: number;
     height: number;
     label: string | DP;
-    upload_hash: string;
+    uploadHash: string;
   };
 };
 
