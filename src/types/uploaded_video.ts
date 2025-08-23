@@ -13,7 +13,7 @@ export type UploadedVideo = File & {
   title?: string;
   path?: string;
   relativePath?: string;
-  uploadStatus: UploadStatus;
+  uploadStatus?: UploadStatus;
   metadata?: {
     url: string;
     thumbnail: string;
