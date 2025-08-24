@@ -1,5 +1,5 @@
 import api from "@/utils/axios";
-import type { LogIn, Register, ResponseSchemaType } from "@/types/";
+import type { LogIn, Register, ResponseSchemaType } from "@/types/getting_started";
 
 export async function register(registerParams: Register) {
   const res = await api.post<ResponseSchemaType>("/auth/register", {
