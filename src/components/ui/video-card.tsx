@@ -34,6 +34,21 @@ export interface VideoCardProps {
   idx: string | number;
 }
 
+const formFields: VideoFormProps["fields"] = [
+  {
+    name: "title",
+    label: "Title",
+    placeholder: "Enter video title",
+    description: "",
+  },
+  {
+    name: "description",
+    label: "Description",
+    placeholder: "Enter video description",
+    description: "",
+  },
+];
+
 export default function VideoCard({ file, idx }: VideoCardProps) {
   const {
     setActiveVideo,
@@ -49,21 +64,6 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
   const [title, setTitle] = useState(file.title);
   const [fileName, setFileName] = useState(file.title);
   const [isFormOpen, setIsFormOpen] = useState(false);
-
-const formFields: VideoFormProps["fields"] = [
-  {
-    name: "title",
-    label: "Title",
-    placeholder: "Enter video title",
-    description: "",
-  },
-  {
-    name: "description",
-    label: "Description",
-    placeholder: "Enter video description",
-    description: "",
-  },
-];
 
   const getStatusInfo = () => {
     switch (file.upload_status) {
@@ -177,7 +177,10 @@ const formFields: VideoFormProps["fields"] = [
             variant="ghost"
             size="icon"
             className="absolute top-[-0.5rem] right-[-0.5rem] z-50 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white cursor-pointer flex-shrink-0"
-            onClick={onClose}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose()
+            }}
           >
             <X className="h-4 w-4" />
           </Button>

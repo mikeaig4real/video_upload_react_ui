@@ -21,12 +21,14 @@ export function CustomForm({
   handleSubmit,
   formFields,
   buttons,
+  onFormChange,
   children,
 }: {
   zodSchema: SchemaType;
   defaultValues: object;
   children?: React.ReactNode;
   handleSubmit: HandleSubmitType;
+  onFormChange?: (hasChanged: boolean) => void;
   formFields: {
     name: keyof z.infer<SchemaType> | string | never;
     label: string;
@@ -54,10 +56,11 @@ export function CustomForm({
       const changed = (
         Object.keys(defaultValues) as (keyof z.infer<SchemaType>)[]
       ).some((key) => values[key] !== defaultValues[key]);
-      setHasChanges(changed);
+      setHasChanges( changed );
+      if (onFormChange) onFormChange(changed)
     });
     return () => subscription.unsubscribe();
-  }, [form, defaultValues]);
+  }, [form, defaultValues, onFormChange]);
 
   function onSubmit(values: z.infer<SchemaType>) {
     handleSubmit(values);

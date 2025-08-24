@@ -45,7 +45,10 @@ export default function VideoForm({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center"
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
         >
           <div className="absolute inset-0 bg-black/20" />
           <motion.div
@@ -66,7 +69,10 @@ export default function VideoForm({
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={onClose}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onClose();
+                    }}
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -82,7 +88,7 @@ export default function VideoForm({
                     {
                       label: "Submit",
                       type: "submit" as const,
-                      formChangeTriggered: false,
+                      formChangeTriggered: true,
                     },
                   ]}
                 />
