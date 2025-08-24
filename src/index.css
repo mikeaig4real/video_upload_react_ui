@@ -127,3 +127,13 @@
 .safe-top {
   padding-top: env(safe-area-inset-top);
 }
+
+/* Adding shimmer keyframe animation for skeleton loading */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

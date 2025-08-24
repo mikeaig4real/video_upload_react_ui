@@ -12,28 +12,52 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import CustomButton from "@/components/CustomButton";
-export type SchemaType = ZodType<object, FieldValues>
-export type HandleSubmitType = (values: z.infer<SchemaType>) => void
+import { useEffect, useState } from "react";
+export type SchemaType = ZodType<object, FieldValues>;
+export type HandleSubmitType = (values: z.infer<SchemaType>) => void;
 export function CustomForm({
   zodSchema,
   defaultValues,
   handleSubmit,
   formFields,
+  buttons,
+  children,
 }: {
   zodSchema: SchemaType;
   defaultValues: object;
+  children?: React.ReactNode;
   handleSubmit: HandleSubmitType;
   formFields: {
     name: keyof z.infer<SchemaType> | string | never;
     label: string;
     description: string;
     placeholder: string;
+    editable?: boolean;
+  }[];
+  buttons: {
+    label: string;
+    onClick?: () => void;
+    type: "button" | "submit" | "reset";
+    variant?: "default" | "outline" | "ghost" | "link" | "destructive";
+    formChangeTriggered: boolean;
   }[];
 }) {
   const form = useForm<z.infer<SchemaType>>({
     resolver: zodResolver(zodSchema),
     defaultValues: defaultValues,
   });
+
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const changed = (
+        Object.keys(defaultValues) as (keyof z.infer<SchemaType>)[]
+      ).some((key) => values[key] !== defaultValues[key]);
+      setHasChanges(changed);
+    });
+    return () => subscription.unsubscribe();
+  }, [form, defaultValues]);
 
   function onSubmit(values: z.infer<SchemaType>) {
     handleSubmit(values);
@@ -42,35 +66,77 @@ export function CustomForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {formFields.map(({ name, label, description, placeholder }, index) => {
-          return (
-            <FormField
-              key={`field-${label}-${index}`}
-              control={form.control}
-              name={name as keyof z.infer<SchemaType>}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="capitalize">{label}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={placeholder}
-                      type={
-                        ["password", "confirm"].includes(name)
-                          ? "password"
-                          : "text"
-                      }
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>{description}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          );
-        })}
-        <CustomButton type="submit">Submit</CustomButton>
+        {formFields.map(
+          (
+            { name, label, description, placeholder, editable = true },
+            index
+          ) => {
+            return (
+              <FormField
+                key={`field-${label}-${index}`}
+                control={form.control}
+                name={name as keyof z.infer<SchemaType>}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="capitalize">{label}</FormLabel>
+                    <FormControl>
+                      {editable ? (
+                        <Input
+                          placeholder={placeholder}
+                          type={
+                            ["password", "confirm"].includes(name)
+                              ? "password"
+                              : "text"
+                          }
+                          {...field}
+                        />
+                      ) : (
+                        <div className="px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground dark:bg-transparent">
+                          {placeholder}
+                        </div>
+                      )}
+                    </FormControl>
+                    <FormDescription>{description}</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            );
+          }
+        )}
+        <div className="flex justify-end gap-2">
+          {buttons?.map((button, index) => {
+            if (button.formChangeTriggered) {
+              if (hasChanges) {
+                return (
+                  <CustomButton
+                    key={`button-${index}`}
+                    type={button.type}
+                    onClick={button.onClick}
+                    variant={button.variant!}
+                  >
+                    {button.label}
+                  </CustomButton>
+                );
+              } else {
+                return null;
+              }
+            } else {
+              return (
+                <CustomButton
+                  key={`button-${index}`}
+                  type={button.type}
+                  onClick={button.onClick}
+                  variant={button.variant!}
+                >
+                  {button.label}
+                </CustomButton>
+              );
+            }
+          })}
+        </div>
       </form>
+      {children}
     </Form>
   );
 }

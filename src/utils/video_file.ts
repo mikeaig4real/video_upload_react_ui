@@ -1,12 +1,25 @@
 import type { UploadedVideo } from "@/types/uploaded_video";
 import hash from "object-hash";
+import z from "zod";
 
 export function formatDuration(seconds: number): string {
+  if (!seconds) return "00:00";
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   const paddedMins = `${mins}`.padStart(2, "0");
   const paddedSecs = `${secs}`.padStart(2, "0");
   return `${paddedMins}:${paddedSecs}`;
+}
+
+export function extractFileNameAndExt(filename: string): [string, string] {
+  const lastDot = filename.lastIndexOf(".");
+  if (lastDot === -1) {
+    return [filename, ""];
+  }
+
+  const name = filename.slice(0, lastDot);
+  const ext = filename.slice(lastDot + 1);
+  return [name, ext];
 }
 
 export const getVideoPixel = ({
@@ -23,7 +36,8 @@ export const getVideoPixel = ({
   return label;
 };
 
-export type DP = "240p" | "360p" | "480p" | "720p" | "1080p" | "4K";
+export const dpSchema = z.enum(["240p", "360p", "480p", "720p", "1080p", "4K"]);
+export type DP = z.infer<typeof dpSchema>;
 export function generateVideoMetadata(
   file: UploadedVideo,
   captureTime: number = 1
@@ -40,14 +54,12 @@ export function generateVideoMetadata(
     let duration = 0;
     let width = 0;
     let height = 0;
-    let label = "";
 
     video.addEventListener("loadeddata", () => {
       const time = Math.min(captureTime, Math.floor(video.duration / 5));
       width = video.videoWidth;
       height = video.videoHeight;
       duration = video.duration;
-      label = getVideoPixel({ width, height });
       video.currentTime = time;
     });
 
@@ -63,21 +75,23 @@ export function generateVideoMetadata(
 
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const thumbnail = canvas.toDataURL("image/png");
-      file.metadata = {
-        url,
-        thumbnail,
-        duration,
-        durationStr: formatDuration(duration),
-        width,
-        height,
-        label,
-        uploadHash: "",
-      };
-      const uploadHash = makeVideoHash(file);
-      file.metadata.uploadHash = uploadHash;
-      file.id = uploadHash;
-      file.uploadStatus = "idle";
+      const thumbnail_url = canvas.toDataURL("image/png");
+      const [title, ] = extractFileNameAndExt(file.name);
+      const upload_hash = makeVideoHash( file );
+
+      // attach ui/file metadata
+      file.upload_status = "idle";
+      file.title = title;
+      file.upload_hash = upload_hash;
+      file.id = upload_hash;
+      
+      // attach video metadata
+      file.playback_url = url;
+      file.upload_url = url;
+      file.thumbnail_url = thumbnail_url;
+      file.duration = duration;
+      file.width = width;
+      file.height = height;
       // URL.revokeObjectURL(url);
       video.remove();
       canvas.remove();
@@ -106,7 +120,7 @@ export function makeVideoHash(file: UploadedVideo): string {
     lastModified: file.lastModified,
     size: file.size,
     type: file.type,
-    width: file.metadata?.width,
-    height: file.metadata?.height,
+    width: file?.width,
+    height: file?.height,
   });
 }
