@@ -1,6 +1,4 @@
-import {
-  registerSchema,
-} from "@/types/getting-started";
+import { registerSchema } from "@/types/getting_started";
 import { CustomForm, type HandleSubmitType } from "@/components/CustomForm";
 
 const formFields: {
@@ -8,6 +6,7 @@ const formFields: {
   label: string;
   placeholder: string;
   description: string;
+  editable?: boolean;
 }[] = [
   {
     name: "username",
@@ -31,7 +30,7 @@ const formFields: {
     name: "confirm",
     label: "confirm password",
     placeholder: "**********",
-    description: "just the same as above 👆",
+    description: "just the same as above 👆"
   },
 ];
 
@@ -42,13 +41,24 @@ const defaultValues = {
   confirm: "",
 };
 
-export function RegisterForm({ handleSubmit }: { handleSubmit: HandleSubmitType }) {
+export function RegisterForm({
+  handleSubmit,
+}: {
+  handleSubmit: HandleSubmitType;
+}) {
   return (
     <CustomForm
       handleSubmit={handleSubmit}
       zodSchema={registerSchema}
       defaultValues={defaultValues}
       formFields={formFields}
+      buttons={[
+        {
+          label: "Submit",
+          type: "submit" as const,
+          formChangeTriggered: false,
+        },
+      ]}
     />
   );
 }

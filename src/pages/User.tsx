@@ -16,6 +16,7 @@ import { Edit3, Check, X } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import type { User } from "@/types/user";
 
+// todo: Use CustomForm component
 export default function User() {
   const { user, setUser } = useStore();
   const [profile, setProfile] = useState<User>(user!);

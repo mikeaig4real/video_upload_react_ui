@@ -5,14 +5,8 @@ import { useStore } from "@/store/useStore";
 import * as API from "@/api";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
-import type {
-  FormType,
-  LogIn,
-  Register,
-  ResponseSchemaType,
-} from "@/types/getting-started";
+import type { FormType, LogIn, Register, ResponseSchemaType } from "@/types/getting_started";
 import { notify } from "@/utils/notify";
-import { log } from "@/utils/logger";
 
 const GetStarted = () => {
   const { formType, setFormType, setUser, setToken } = useStore();
@@ -31,7 +25,6 @@ const GetStarted = () => {
   };
   function handleRegisterSubmit(values: object) {
     const assertValues = values as Register;
-    log(assertValues);
     notify(API.AuthAPI.register(assertValues), {
       success: onSuccess("register"),
       loading: "Registering...",
@@ -39,7 +32,6 @@ const GetStarted = () => {
   }
   function handleLogInSubmit(values: object) {
     const assertValues = values as LogIn;
-    log(assertValues);
     notify(API.AuthAPI.login(assertValues), {
       success: onSuccess("login"),
       loading: "Logging in...",

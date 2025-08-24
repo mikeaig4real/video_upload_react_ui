@@ -5,7 +5,7 @@ import appSettings from "@/assets/settings";
 import type { HeroStateType } from "@/types/hero";
 import type { Theme, ThemeStateType } from "@/types/themes";
 import { immer } from "zustand/middleware/immer";
-import type { GettingStartedState } from "@/types/getting-started";
+import type { GettingStartedState } from "@/types/getting_started";
 import type { TokenStateType } from "@/types/tokens";
 import type { UserStateType } from "@/types/user";
 import {
@@ -25,6 +25,7 @@ import type {
   VideoPlayerState,
 } from "@/types/video_player";
 import type { SettingItem } from "@/types/settings";
+import type { UploadResponse } from "@/types/upload";
 interface State {
   hero: HeroStateType;
   theme: ThemeStateType["theme"];
@@ -62,6 +63,16 @@ interface Actions {
   setPlayerOptions: (options: VideoPlayerOptions) => void;
   setPlayerState: (playerState: VideoPlayerState) => void;
   setAppSettings: (settings: SettingItem[]) => void;
+  setVideoStatus: (
+    file: UploadedVideo,
+    status: UploadedVideo["upload_status"]
+  ) => void;
+  setVideoProgress: (file: UploadedVideo, progress: number) => void;
+  finalizeUpload: (file: UploadedVideo, upload_details: UploadResponse) => void;
+  setUploadedVideoTitle: (
+    file: UploadedVideo,
+    title: UploadedVideo["title"]
+  ) => void;
 }
 
 const dummyUser: UserStateType["user"] = {
@@ -153,6 +164,66 @@ export const useStore = create<State & Actions>()(
       setAppSettings(settings) {
         set((state) => {
           state.appSettings = settings;
+        });
+      },
+      setVideoStatus: (file, status) => {
+        set((state) => {
+          const newArr = state.uploadedFiles.map((v) => {
+            if (v.id === file.id) v.upload_status = status;
+            return v;
+          });
+          get().setUploadedFiles(newArr);
+        });
+      },
+      setVideoProgress: (file, progress) => {
+        set((state) => {
+          const newArr = state.uploadedFiles.map((v) => {
+            if (v.id === file.id) v.upload_progress = progress;
+            return v;
+          });
+          get().setUploadedFiles(newArr);
+        });
+      },
+      finalizeUpload: (file, upload_details) => {
+        set((state) => {
+          const newArr = state.uploadedFiles.map((v) => {
+            if (v.id === file.id) {
+              // update ui/file metadata
+              v.upload_details = upload_details; // just for safe keeping incase something changes
+              v.upload_status = "completed";
+              v.upload_progress = 100;
+
+              const {
+                playback_url,
+                secure_url,
+                eager = [],
+                duration,
+                width,
+                height,
+                public_id,
+              } = upload_details;
+
+              // attach video metadata
+              v.asset_id = public_id;
+              v.playback_url = playback_url;
+              v.upload_url = secure_url;
+              v.thumbnail_url = eager[0]?.url;
+              v.duration = duration;
+              v.width = width;
+              v.height = height;
+            }
+            return v;
+          });
+          get().setUploadedFiles(newArr);
+        });
+      },
+      setUploadedVideoTitle: (file, title) => {
+        set((state) => {
+          const newArr = state.uploadedFiles.map((v) => {
+            if (v.id === file.id) v.title = title;
+            return v;
+          });
+          get().setUploadedFiles(newArr);
         });
       },
       hero: hero_asset,

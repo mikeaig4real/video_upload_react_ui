@@ -64,7 +64,6 @@ export const FileUpload = () => {
         });
         return;
       }
-      file.title = file.name;
     }
     toast.success("Processed & added files.", {
       id: toastId,

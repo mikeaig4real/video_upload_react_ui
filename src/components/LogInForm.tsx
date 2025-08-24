@@ -1,4 +1,4 @@
-import { logInSchema } from "@/types/getting-started";
+import { logInSchema } from "@/types/getting_started";
 import { CustomForm, type HandleSubmitType } from "@/components/CustomForm";
 
 const formFields: {
@@ -26,15 +26,26 @@ const defaultValues = {
   password: "",
 };
 
-export function LogInForm ( { handleSubmit }: {
-  handleSubmit: HandleSubmitType
+export function LogInForm({
+  handleSubmit,
+}: {
+  handleSubmit: HandleSubmitType;
 }) {
   return (
     <CustomForm
       handleSubmit={handleSubmit}
       zodSchema={logInSchema}
       defaultValues={defaultValues}
-      formFields={formFields}
+      formFields={ formFields }
+      buttons={
+        [
+          {
+            label: "Submit",
+            type: "submit" as const,
+            formChangeTriggered: false
+          }
+        ]
+      }
     />
   );
 }
