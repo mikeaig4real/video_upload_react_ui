@@ -15,6 +15,7 @@ const formFields: ({
     label: "password",
     placeholder: "**********",
     description: "your password",
+    type: "password",
   },
 ];
 

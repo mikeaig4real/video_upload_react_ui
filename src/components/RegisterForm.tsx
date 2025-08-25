@@ -21,12 +21,14 @@ const formFields: ({
     label: "password",
     placeholder: "**********",
     description: "at least 8, small + CAPS + digits + special characters",
+    type: "password",
   },
   {
     name: "confirm",
     label: "confirm password",
     placeholder: "**********",
     description: "just the same as above 👆",
+    type: "password",
   },
 ];
 
