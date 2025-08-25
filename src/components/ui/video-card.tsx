@@ -33,7 +33,7 @@ export interface VideoCardProps {
   file: UploadedVideo;
   idx: string | number;
   showSettingsBtn?: boolean;
-  showTitleEdit?: boolean;
+  showTitleEditBtn?: boolean;
 }
 
 const formFields: VideoFormProps["fields"] = [
@@ -61,8 +61,8 @@ const formFields: VideoFormProps["fields"] = [
 export default function VideoCard({
   file,
   idx,
-  showSettingsBtn = true,
-  showTitleEdit = true,
+  showSettingsBtn = ["completed"].includes(file.upload_status!),
+  showTitleEditBtn = ["idle"].includes(file.upload_status!),
 }: VideoCardProps) {
   const {
     setActiveVideo,
@@ -107,7 +107,7 @@ export default function VideoCard({
           icon: <AlertCircle className="h-3 w-3" />,
           label: "Error",
           variant: "destructive" as const,
-          color: "text-red-600",
+          color: "text-red-300",
         };
       default:
         return null;
@@ -279,7 +279,7 @@ export default function VideoCard({
                   <CardTitle className="text-lg font-semibold truncate @[250px]/card:text-xl">
                     {fileName}
                   </CardTitle>
-                  {showTitleEdit && (
+                  {showTitleEditBtn && (
                     <Button
                       variant="ghost"
                       size="icon"

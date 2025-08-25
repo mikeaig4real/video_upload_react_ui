@@ -126,7 +126,7 @@ export const FileUpload = () => {
           >
             {allowedVideos.length > 0 &&
               allowedVideos.map((file, idx) => (
-                <VideoCard key={`video-card-${idx}`} file={file} idx={idx} showSettingsBtn={false} />
+                <VideoCard key={`video-card-${idx}`} file={file} idx={idx} />
               ))}
             {!allowedVideos.length && (
               <motion.div

@@ -80,7 +80,7 @@ export async function uploadToCloudBucket({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } = e as any;
     useStore.getState().setVideoStatus(file, "error");
-    toast.error(error.message);
+    toast.error(`An error: ${error.message} occurred, retry at uploads`);
     throw new Error(error.message);
   }
 }
