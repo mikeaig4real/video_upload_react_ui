@@ -60,7 +60,7 @@ export async function uploadToCloudBucket({
     setTimeout(() => {
       clearInterval(fakeInterval!);
       toast.error(
-        "Nothing went wrong, this is a simulation, you can retry at upload"
+        "Nothing went wrong, this is a simulation, you can retry at uploads"
       );
       useStore.getState().setVideoStatus(file, "error");
       fakeProgress = 10;
