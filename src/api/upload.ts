@@ -58,9 +58,12 @@ export async function uploadToCloudBucket({
       useStore.getState().setVideoProgress(file, fakeProgress);
     }, 1000);
     setTimeout(() => {
-      clearInterval( fakeInterval! );
-      toast.error("Nothing went wrong, this is a simulation, you can retry at uploads");
+      clearInterval(fakeInterval!);
+      toast.error(
+        "Nothing went wrong, this is a simulation, you can retry at upload"
+      );
       useStore.getState().setVideoStatus(file, "error");
+      fakeProgress = 10;
     }, 7000);
     if (!API_BASE_URL) return null;
     const res = await axios.post<UploadResponse>(
