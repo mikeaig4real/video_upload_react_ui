@@ -75,13 +75,13 @@ interface Actions {
   ) => void;
 }
 
-const dummyUser: UserStateType["user"] = {
+export const dummyUser: UserStateType["user"] = {
   id: 1,
   username: "john_doe",
   email: "john_doe@example.com",
 };
 
-const dummyToken = "this_is_the_matrix";
+export const dummyToken = "this_is_the_matrix";
 
 export const useStore = create<State & Actions>()(
   persist(

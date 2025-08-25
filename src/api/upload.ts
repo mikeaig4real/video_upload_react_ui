@@ -10,7 +10,10 @@ import type { APIResponse } from "@/types/response";
 import axios from "axios";
 import { toast } from "sonner";
 import { useStore } from "@/store/useStore";
+import { API_BASE_URL } from "@/assets/constants";
 
+let fakeProgress = 10;
+let fakeInterval: NodeJS.Timeout | null = null;
 export async function getParams({ file }: { file: UploadedVideo }) {
   const uploadedInputParams: UploadInput = {
     type: file.type,
@@ -18,6 +21,7 @@ export async function getParams({ file }: { file: UploadedVideo }) {
     size: file.size,
   };
   useStore.getState().setVideoStatus(file, "processing");
+  if (!API_BASE_URL) return { data: null };
   const res = await api.get<APIResponse<UploadOutput>>("/upload/params", {
     params: uploadedInputParams,
   });
@@ -34,9 +38,11 @@ export async function uploadToCloudBucket({
   try {
     const formData = new FormData();
     formData.append("file", file);
-    Object.entries(uploadOutputParams.fields).forEach(([key, value]) => {
-      formData.append(`${key}`, `${value}`);
-    });
+    if (uploadOutputParams?.fields) {
+      Object.entries(uploadOutputParams?.fields).forEach(([key, value]) => {
+        formData.append(`${key}`, `${value}`);
+      });
+    }
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
       onUploadProgress: (event: ProgressEvent) => {
@@ -47,6 +53,16 @@ export async function uploadToCloudBucket({
       },
     };
     useStore.getState().setVideoStatus(file, "uploading");
+    fakeInterval = setInterval(() => {
+      fakeProgress += 10;
+      useStore.getState().setVideoProgress(file, fakeProgress);
+    }, 1000);
+    setTimeout(() => {
+      clearInterval( fakeInterval! );
+      toast.error("Nothing went wrong, this is a simulation, you can retry at uploads");
+      useStore.getState().setVideoStatus(file, "error");
+    }, 7000);
+    if (!API_BASE_URL) return null;
     const res = await axios.post<UploadResponse>(
       uploadOutputParams.upload_url,
       formData,
@@ -87,6 +103,7 @@ export async function uploadFileToCloudBucket(file: UploadedVideo) {
 export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   const promises = files.map(async (file) => {
     const upload_details = await uploadFileToCloudBucket(file);
+    if (!API_BASE_URL) return file;
     useStore.getState().finalizeUpload(file, upload_details);
     return file;
   });
