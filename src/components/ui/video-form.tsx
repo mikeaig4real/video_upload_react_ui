@@ -7,17 +7,13 @@ import {
   uploadedVideoSchema,
   type UploadedVideo,
 } from "@/types/uploaded_video";
-import { CustomForm, type HandleSubmitType } from "@/components/CustomForm";
+import { CustomForm, type FormFieldsDefault, type HandleSubmitType } from "@/components/CustomForm";
 
 export interface VideoFormProps {
   video: UploadedVideo;
-  fields: {
+  fields: ({
     name: keyof UploadedVideo;
-    label: string;
-    placeholder: string;
-    description: string;
-    editable?: boolean;
-  }[];
+  } & FormFieldsDefault)[];
   isOpen: boolean;
   onClose: () => void;
   onSave?: HandleSubmitType;

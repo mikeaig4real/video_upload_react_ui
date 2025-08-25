@@ -32,6 +32,8 @@ import VideoForm, { type VideoFormProps } from "@/components/ui/video-form";
 export interface VideoCardProps {
   file: UploadedVideo;
   idx: string | number;
+  showSettingsBtn?: boolean;
+  showTitleEdit?: boolean;
 }
 
 const formFields: VideoFormProps["fields"] = [
@@ -47,9 +49,21 @@ const formFields: VideoFormProps["fields"] = [
     placeholder: "Enter video description",
     description: "",
   },
+  {
+    name: "is_public",
+    label: "Public",
+    placeholder: "Change visibility",
+    description: "",
+    type: "checkbox",
+  },
 ];
 
-export default function VideoCard({ file, idx }: VideoCardProps) {
+export default function VideoCard({
+  file,
+  idx,
+  showSettingsBtn = true,
+  showTitleEdit = true,
+}: VideoCardProps) {
   const {
     setActiveVideo,
     setActiveSources,
@@ -143,7 +157,7 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
     };
     const sources = [
       {
-        src: videoObject?.playback_url || videoObject.upload_url!,
+        src: videoObject.upload_url!,
         type: videoObject.type!,
       },
     ];
@@ -179,12 +193,12 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
             className="absolute top-[-0.5rem] right-[-0.5rem] z-50 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white cursor-pointer flex-shrink-0"
             onClick={(e) => {
               e.stopPropagation();
-              onClose()
+              onClose();
             }}
           >
             <X className="h-4 w-4" />
           </Button>
-          {file.upload_status !== "completed" && (
+          {showSettingsBtn && (
             <Button
               variant="ghost"
               size="icon"
@@ -265,17 +279,19 @@ export default function VideoCard({ file, idx }: VideoCardProps) {
                   <CardTitle className="text-lg font-semibold truncate @[250px]/card:text-xl">
                     {fileName}
                   </CardTitle>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="flex-shrink-0 h-6 w-6 transition-opacity text-muted-foreground hover:text-foreground"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsEditing(true);
-                    }}
-                  >
-                    <Edit3 className="h-3 w-3" />
-                  </Button>
+                  {showTitleEdit && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="flex-shrink-0 h-6 w-6 transition-opacity text-muted-foreground hover:text-foreground"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsEditing(true);
+                      }}
+                    >
+                      <Edit3 className="h-3 w-3" />
+                    </Button>
+                  )}
                 </motion.div>
               )}
             </div>
