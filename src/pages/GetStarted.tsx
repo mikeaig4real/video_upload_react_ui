@@ -28,6 +28,7 @@ const GetStarted = () => {
     notify(API.AuthAPI.register(assertValues), {
       success: onSuccess("register"),
       loading: "Registering...",
+      error: "Registration Failed."
     });
   }
   function handleLogInSubmit(values: object) {
@@ -35,6 +36,7 @@ const GetStarted = () => {
     notify(API.AuthAPI.login(assertValues), {
       success: onSuccess("login"),
       loading: "Logging in...",
+      error: "Login Failed."
     });
   }
   return (

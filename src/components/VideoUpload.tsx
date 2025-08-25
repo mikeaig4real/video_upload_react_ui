@@ -17,6 +17,7 @@ export function VideoUpload() {
         return "File Uploaded";
       },
       loading: "Uploading file...",
+      error: "Upload Failed."
     });
     navigate("/dashboard/videos");
   };
