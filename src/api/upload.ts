@@ -38,11 +38,11 @@ export async function uploadToCloudBucket({
   try {
     const formData = new FormData();
     formData.append("file", file);
-    if (uploadOutputParams?.fields) {
+    if (uploadOutputParams) {
       Object.entries(uploadOutputParams?.fields).forEach(([key, value]) => {
         formData.append(`${key}`, `${value}`);
       });
-    }
+    } 
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
       onUploadProgress: (event: ProgressEvent) => {

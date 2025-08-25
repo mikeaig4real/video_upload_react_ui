@@ -62,7 +62,7 @@ export default function VideoCard({
   file,
   idx,
   showSettingsBtn = ["completed"].includes(file.upload_status!),
-  showTitleEditBtn = ["idle"].includes(file.upload_status!),
+  showTitleEditBtn = ["idle", "error"].includes(file.upload_status!),
 }: VideoCardProps) {
   const {
     setActiveVideo,
