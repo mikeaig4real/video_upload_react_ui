@@ -10,11 +10,9 @@ import VideoCard from "@/components/ui/video-card";
 import { VIDEO_SPECS } from "@/assets/constants";
 import { convertSize } from "@/utils/conversions";
 import { videoFileSchema, type UploadedVideo } from "@/types/uploaded_video";
-import {
-  checkVideoDuplicate,
-  generateVideoMetadata,
-} from "@/utils/video_file";
+import { checkVideoDuplicate, generateVideoMetadata } from "@/utils/video_file";
 import { log } from "@/utils/logger";
+import { filterVideosByStatus } from "@/utils/uploaded_videos";
 
 const mainVariant = {
   initial: {
@@ -89,6 +87,8 @@ export const FileUpload = () => {
     },
   });
 
+  const allowedVideos = filterVideosByStatus(uploadedFiles, ["error", "idle"]);
+
   return (
     <div className="w-full" {...getRootProps()}>
       <motion.div
@@ -119,16 +119,16 @@ export const FileUpload = () => {
           </p>
           <div
             className={`relative mt-10 mx-auto ${
-              uploadedFiles.length > 0
+              allowedVideos.length > 0
                 ? "grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr w-full"
                 : "w-full"
             }`}
           >
-            {uploadedFiles.length > 0 &&
-              uploadedFiles.map((file, idx) => (
-                <VideoCard key={`video-card-${idx}`} file={file} idx={idx} />
+            {allowedVideos.length > 0 &&
+              allowedVideos.map((file, idx) => (
+                <VideoCard key={`video-card-${idx}`} file={file} idx={idx} showSettingsBtn={false} />
               ))}
-            {!uploadedFiles.length && (
+            {!allowedVideos.length && (
               <motion.div
                 layoutId="file-upload"
                 variants={mainVariant}
@@ -156,7 +156,7 @@ export const FileUpload = () => {
                 )}
               </motion.div>
             )}
-            {!uploadedFiles.length && (
+            {!allowedVideos.length && (
               <motion.div
                 variants={secondaryVariant}
                 className="absolute opacity-0 border border-dashed border-sky-400 inset-0 z-30 bg-transparent flex items-center justify-center h-32 mt-4 w-full max-w-[8rem] mx-auto rounded-md"

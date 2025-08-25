@@ -1,13 +1,9 @@
-import { registerSchema } from "@/types/getting_started";
-import { CustomForm, type HandleSubmitType } from "@/components/CustomForm";
+import { registerSchema, type Register } from "@/types/getting_started";
+import { CustomForm, type FormFieldsDefault, type HandleSubmitType } from "@/components/CustomForm";
 
-const formFields: {
-  name: "email" | "username" | "password" | "confirm";
-  label: string;
-  placeholder: string;
-  description: string;
-  editable?: boolean;
-}[] = [
+const formFields: ({
+  name: keyof Register;
+} & FormFieldsDefault)[] = [
   {
     name: "username",
     label: "username",
@@ -30,7 +26,7 @@ const formFields: {
     name: "confirm",
     label: "confirm password",
     placeholder: "**********",
-    description: "just the same as above 👆"
+    description: "just the same as above 👆",
   },
 ];
 

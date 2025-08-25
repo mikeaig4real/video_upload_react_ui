@@ -13,8 +13,25 @@ import {
 import { Input } from "@/components/ui/input";
 import CustomButton from "@/components/CustomButton";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@radix-ui/react-select";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 export type SchemaType = ZodType<object, FieldValues>;
-export type HandleSubmitType = (values: z.infer<SchemaType>) => void;
+export type HandleSubmitType = ( values: z.infer<SchemaType> ) => void;
+export type FormFieldsDefault = {
+  label: string;
+  description: string;
+  placeholder: string;
+  editable?: boolean;
+  type?: "text" | "password" | "textarea" | "select" | "checkbox";
+  options?: { label: string; value: string }[];
+};
 export function CustomForm({
   zodSchema,
   defaultValues,
@@ -29,13 +46,9 @@ export function CustomForm({
   children?: React.ReactNode;
   handleSubmit: HandleSubmitType;
   onFormChange?: (hasChanged: boolean) => void;
-  formFields: {
+  formFields: ({
     name: keyof z.infer<SchemaType> | string | never;
-    label: string;
-    description: string;
-    placeholder: string;
-    editable?: boolean;
-  }[];
+  } & FormFieldsDefault)[];
   buttons: {
     label: string;
     onClick?: () => void;
@@ -56,8 +69,8 @@ export function CustomForm({
       const changed = (
         Object.keys(defaultValues) as (keyof z.infer<SchemaType>)[]
       ).some((key) => values[key] !== defaultValues[key]);
-      setHasChanges( changed );
-      if (onFormChange) onFormChange(changed)
+      setHasChanges(changed);
+      if (onFormChange) onFormChange(changed);
     });
     return () => subscription.unsubscribe();
   }, [form, defaultValues, onFormChange]);
@@ -71,7 +84,15 @@ export function CustomForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {formFields.map(
           (
-            { name, label, description, placeholder, editable = true },
+            {
+              name,
+              label,
+              description,
+              placeholder,
+              editable = true,
+              type = "text",
+              options = [],
+            },
             index
           ) => {
             return (
@@ -84,18 +105,55 @@ export function CustomForm({
                     <FormLabel className="capitalize">{label}</FormLabel>
                     <FormControl>
                       {editable ? (
-                        <Input
-                          placeholder={placeholder}
-                          type={
-                            ["password", "confirm"].includes(name)
-                              ? "password"
-                              : "text"
-                          }
-                          {...field}
-                        />
+                        <div>
+                          {type === "textarea" && (
+                            <Textarea
+                              {...field}
+                              placeholder={placeholder}
+                              className="w-full"
+                            />
+                          )}
+
+                          {type === "select" && (
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder={`Select ${label}`} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {options?.map((opt) => (
+                                  <SelectItem key={opt.value} value={opt.value}>
+                                    {opt.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          )}
+
+                          {type === "checkbox" && (
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          )}
+                          {!type || type === "text" || type === "password" ? (
+                            <Input
+                              placeholder={placeholder}
+                              type={
+                                type ??
+                                (["password", "confirm"].includes(name)
+                                  ? "password"
+                                  : "text")
+                              }
+                              {...field}
+                            />
+                          ) : null}
+                        </div>
                       ) : (
                         <div className="px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground dark:bg-transparent">
-                          {placeholder}
+                          {String(field.value ?? "")}
                         </div>
                       )}
                     </FormControl>

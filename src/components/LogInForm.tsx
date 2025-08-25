@@ -1,12 +1,9 @@
-import { logInSchema } from "@/types/getting_started";
-import { CustomForm, type HandleSubmitType } from "@/components/CustomForm";
+import { logInSchema, type LogIn } from "@/types/getting_started";
+import { CustomForm, type FormFieldsDefault, type HandleSubmitType } from "@/components/CustomForm";
 
-const formFields: {
-  name: "username" | "password";
-  label: string;
-  placeholder: string;
-  description: string;
-}[] = [
+const formFields: ({
+  name: keyof LogIn;
+} & FormFieldsDefault)[] = [
   {
     name: "username",
     label: "email",

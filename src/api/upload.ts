@@ -39,7 +39,7 @@ export async function uploadToCloudBucket({
     });
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
-      onupload_progress: (event: ProgressEvent) => {
+      onUploadProgress: (event: ProgressEvent) => {
         if (event.total) {
           const progress = Math.round((event.loaded * 100) / event.total);
           useStore.getState().setVideoProgress(file, progress);

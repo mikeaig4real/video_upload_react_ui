@@ -85,6 +85,7 @@ export function generateVideoMetadata(
       file.upload_hash = upload_hash;
       file.id = upload_hash;
       file.description = "";
+      file.is_public = true;
 
       // attach video metadata
       file.playback_url = url;
