@@ -141,12 +141,7 @@ export function CustomForm({
                           {!type || type === "text" || type === "password" ? (
                             <Input
                               placeholder={placeholder}
-                              type={
-                                type ??
-                                (["password", "confirm"].includes(name)
-                                  ? "password"
-                                  : "text")
-                              }
+                              type={type}
                               {...field}
                             />
                           ) : null}
