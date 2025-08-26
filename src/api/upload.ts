@@ -38,7 +38,7 @@ export async function uploadToCloudBucket({
       Object.entries(uploadOutputParams?.fields).forEach(([key, value]) => {
         formData.append(`${key}`, `${value}`);
       });
-    } 
+    }
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
       onUploadProgress: (event: ProgressEvent) => {

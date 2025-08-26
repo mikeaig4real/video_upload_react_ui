@@ -3,7 +3,9 @@ import { dpSchema } from "@/utils/video_file";
 import { z } from "zod";
 
 export const fileSchema = z.instanceof(File);
-
+export const uploadStatusSchema =z
+      .enum(["idle", "uploading", "processing", "completed", "error"])
+      .optional()
 export const uploadedVideoSchema = z.intersection(
   fileSchema,
   z.object({
@@ -12,9 +14,7 @@ export const uploadedVideoSchema = z.intersection(
     title: z.string().optional(),
     path: z.string().optional(),
     relativePath: z.string().optional(),
-    upload_status: z
-      .enum(["idle", "uploading", "processing", "completed", "error"])
-      .optional(),
+    upload_status: uploadStatusSchema,
     upload_progress: z.number().min(0).max(100).optional(),
     upload_details: z.unknown().optional(),
     upload_url: z.url().optional(),
