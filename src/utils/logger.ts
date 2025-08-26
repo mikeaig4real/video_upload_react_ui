@@ -16,3 +16,9 @@ export const error = (...args: unknown[]) => {
     console.error(...args);
   }
 };
+
+export default {
+  log,
+  warn,
+  error
+}
