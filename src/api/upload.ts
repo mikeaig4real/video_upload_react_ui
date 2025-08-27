@@ -96,3 +96,14 @@ export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   log(resolvedPromises);
   return resolvedPromises;
 }
+
+/*
+TODO: 
+1. Get params, mark as processing
+2. Try uploading with the obtained params, mark as uploading
+3. On upload success, finalize the upload
+4. On upload error, mark as error, let user retry
+5. Finalize by saving video metadata to database
+6. On success to finalize, mark as completed
+7. On error to finalize, mark as processing, retry automatically n times
+ */
