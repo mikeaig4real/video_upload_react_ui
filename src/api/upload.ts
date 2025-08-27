@@ -106,4 +106,5 @@ TODO:
 5. Finalize by saving video metadata to database
 6. On success to finalize, mark as completed
 7. On error to finalize, mark as processing, retry automatically n times
+8. Handle promises with promise.allSettled
  */
