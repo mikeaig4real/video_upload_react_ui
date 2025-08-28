@@ -10,18 +10,31 @@ import type { APIResponse } from "@/types/response";
 import axios from "axios";
 import { toast } from "sonner";
 import { useStore } from "@/store/useStore";
+import { createVideo } from "./video";
+import { withRetry } from "@/utils/retry";
+import { makeFinalUploadMessage } from "@/utils/file_upload_errors";
 
 export async function getParams({ file }: { file: UploadedVideo }) {
-  const uploadedInputParams: UploadInput = {
-    type: file.type,
-    title: file.title!,
-    size: file.size,
-  };
-  useStore.getState().setVideoStatus(file, "processing");
-  const res = await api.get<APIResponse<UploadOutput>>("/upload/params", {
-    params: uploadedInputParams,
-  });
-  return res.data!;
+  try {
+    const uploadedInputParams: UploadInput | UploadedVideo = {
+      type: file.type,
+      title: file.title!,
+      size: file.size,
+      upload_hash: file.upload_hash!,
+      upload_status: file.upload_status!,
+    };
+    useStore.getState().setVideoStatus(file, "processing");
+    const res = await api.get<APIResponse<UploadOutput>>("/upload/params", {
+      params: uploadedInputParams,
+    });
+    return res.data;
+  } catch (error) {
+    log({
+      error,
+    });
+    useStore.getState().setVideoStatus(file, "error");
+    throw new Error("Failed to get upload parameters"); // throws to uploadFileToCloudBucket
+  }
 }
 
 export async function uploadToCloudBucket({
@@ -67,7 +80,7 @@ export async function uploadToCloudBucket({
     } = e as any;
     useStore.getState().setVideoStatus(file, "error");
     toast.error(`An error: ${error.message} occurred, retry at uploads`);
-    throw new Error(error.message);
+    throw new Error(error.message); // throws to uploadFileToCloudBucket
   }
 }
 
@@ -84,27 +97,33 @@ export async function uploadFileToCloudBucket(file: UploadedVideo) {
     upload_details,
   });
   return upload_details!;
-}
+} // throws to uploadMultipleFilesToCloudBucket automatically
 
 export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   const promises = files.map(async (file) => {
-    const upload_details = await uploadFileToCloudBucket(file);
+    const upload_details = await uploadFileToCloudBucket(file); // throws to Promise.all/ rejected in Promise.allSettled
     useStore.getState().finalizeUpload(file, upload_details);
+    try {
+      await withRetry(
+        async () => {
+          await createVideo(file);
+        },
+        undefined,
+        5000
+      );
+      useStore.getState().setVideoStatus(file, "completed");
+    } catch (error) {
+      useStore.getState().setVideoStatus(file, "processing");
+      log({
+        error,
+      });
+      throw new Error("Failed to finalize video upload, will keep trying"); // throws to Promise.all/ rejected reason/status in in Promise.allSettled
+    }
     return file;
   });
-  const resolvedPromises = await Promise.all(promises);
+  const resolvedPromises = await Promise.allSettled(promises); // will not throw to notify rather attach
   log(resolvedPromises);
+  const message = makeFinalUploadMessage(resolvedPromises);
+  toast.message(message);
   return resolvedPromises;
 }
-
-/*
-TODO: 
-1. Get params, mark as processing
-2. Try uploading with the obtained params, mark as uploading
-3. On upload success, finalize the upload
-4. On upload error, mark as error, let user retry
-5. Finalize by saving video metadata to database
-6. On success to finalize, mark as completed
-7. On error to finalize, mark as processing, retry automatically n times
-8. Handle promises with promise.allSettled
- */

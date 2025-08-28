@@ -182,7 +182,6 @@ export const useStore = create<State & Actions>()(
             if (v.id === file.id) {
               // update ui/file metadata
               v.upload_details = upload_details; // just for safe keeping incase something changes
-              v.upload_status = "completed";
               v.upload_progress = 100;
 
               const {

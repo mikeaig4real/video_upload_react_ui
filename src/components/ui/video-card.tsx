@@ -34,6 +34,7 @@ export interface VideoCardProps {
   idx: string | number;
   showSettingsBtn?: boolean;
   showTitleEditBtn?: boolean;
+  showCloseBtn?: boolean;
 }
 
 const formFields: VideoFormProps["fields"] = [
@@ -63,6 +64,7 @@ export default function VideoCard({
   idx,
   showSettingsBtn = ["completed"].includes(file.upload_status!),
   showTitleEditBtn = ["idle", "error"].includes(file.upload_status!),
+  showCloseBtn = ["idle", "error"].includes(file.upload_status!),
 }: VideoCardProps) {
   const {
     setActiveVideo,
@@ -187,17 +189,19 @@ export default function VideoCard({
           onClick={(e) => e.stopPropagation()}
           className="@container/card relative w-full max-w-sm bg-transparent"
         >
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute top-[-0.5rem] right-[-0.5rem] z-50 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white cursor-pointer flex-shrink-0"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClose();
-            }}
-          >
-            <X className="h-4 w-4" />
-          </Button>
+          {showCloseBtn && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-[-0.5rem] right-[-0.5rem] z-50 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white cursor-pointer flex-shrink-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
           {showSettingsBtn && (
             <Button
               variant="ghost"
