@@ -1,17 +1,32 @@
 import CustomHeader from "@/components/ui/custom-header";
 import VideoCards from "@/components/ui/video-cards";
 import { useStore } from "@/store/useStore";
+import { notify } from "@/utils/notify";
+import * as API from "@/api";
 import { filterVideosByStatus } from "@/utils/uploaded_videos";
+import { useEffect } from "react";
 import { Link } from "react-router";
+import type { UploadedVideo } from "@/types/uploaded_video";
+import { log } from "@/utils/logger";
 
-const Videos = () =>
-{
-  const { uploadedFiles } = useStore()
+const Videos = () => {
+  const { uploadedFiles, videoFilters, setUploadedFiles } = useStore();
   const allowedVideos = filterVideosByStatus(uploadedFiles, [
     "completed",
     "processing",
     "uploading",
   ]);
+  useEffect(() => {
+    notify(API.VideoAPI.getVideos(videoFilters), {
+      success: ({ data }: { data: UploadedVideo[] }) => {
+        log(data)
+        setUploadedFiles(data);
+        return "Done";
+      },
+      loading: "Loading..",
+      error: "Could not load",
+    });
+  }, [setUploadedFiles, videoFilters]);
   return allowedVideos.length ? (
     <VideoCards videos={allowedVideos} />
   ) : (

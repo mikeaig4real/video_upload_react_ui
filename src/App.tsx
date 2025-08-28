@@ -5,7 +5,7 @@ import { BackgroundLines } from "@/components/ui/background-lines";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
-
+// TODO: need to enforce DRY with my types, like seriously
 function App() {
   return (
     <BackgroundLines>
@@ -14,7 +14,7 @@ function App() {
           <AppRoutes />
         </AppErrorBoundary>
       </main>
-      <div className="fixed top-2 right-3 z-50">
+      <div className="fixed top-2 right-3 z-96">
         <ModeToggle />
       </div>
       <Toaster expand={true} closeButton />

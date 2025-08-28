@@ -31,6 +31,7 @@ export async function createVideo(uploadedVideo: UploadedVideo) {
       type: uploadedVideo.type,
       upload_status: "completed",
       upload_url: uploadedVideo.upload_url,
+      duration: uploadedVideo.duration
     };
     const res = await api.put<UploadedVideo>("/video", videoFile);
     return res.data;

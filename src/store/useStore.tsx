@@ -26,6 +26,8 @@ import type {
 } from "@/types/video_player";
 import type { SettingItem } from "@/types/settings";
 import type { UploadResponse } from "@/types/upload";
+import type { FilterParams } from "@/types/video";
+import { VIDEO_FILTER_DEFAULTS } from "@/assets/filters";
 interface State {
   hero: HeroStateType;
   theme: ThemeStateType["theme"];
@@ -44,6 +46,7 @@ interface State {
   playerOptions: VideoPlayerOptions;
   playerState: VideoPlayerState;
   appSettings: SettingItem[];
+  videoFilters: FilterParams;
 }
 
 interface Actions {
@@ -73,6 +76,7 @@ interface Actions {
     file: UploadedVideo,
     title: UploadedVideo["title"]
   ) => void;
+  setVideoFilters: (filters: FilterParams) => void;
 }
 
 export const useStore = create<State & Actions>()(
@@ -217,6 +221,11 @@ export const useStore = create<State & Actions>()(
           get().setUploadedFiles(newArr);
         });
       },
+      setVideoFilters: (filters) => {
+        set((state) => {
+          state.videoFilters = filters;
+        });
+      },
       hero: hero_asset,
       theme: get()?.theme || DEFAULT_THEME,
       formType: DEFAULT_FORM_TYPE,
@@ -243,6 +252,7 @@ export const useStore = create<State & Actions>()(
         player: null,
       },
       appSettings,
+      videoFilters: VIDEO_FILTER_DEFAULTS,
     })),
     {
       name: PERSIST_KEY,
