@@ -1,9 +1,12 @@
 import api from "@/utils/axios";
-import { type FilterParams } from "@/types/video";
-import type { UploadedVideo, OptionalUploadedVideo } from "@/types/uploaded_video";
+import type {
+  UploadedVideo,
+  OptionalUploadedVideo,
+} from "@/types/uploaded_video";
 import { log } from "@/utils/logger";
+import type { VideoFilters } from "@/types/video_filters";
 
-export async function getVideos(filter: FilterParams) {
+export async function getVideos(filter: VideoFilters) {
   const res = await api.get<UploadedVideo[]>("/video", {
     params: filter,
   });
@@ -31,7 +34,7 @@ export async function createVideo(uploadedVideo: UploadedVideo) {
       type: uploadedVideo.type,
       upload_status: "completed",
       upload_url: uploadedVideo.upload_url,
-      duration: uploadedVideo.duration
+      duration: uploadedVideo.duration,
     };
     const res = await api.put<UploadedVideo>("/video", videoFile);
     return res.data;

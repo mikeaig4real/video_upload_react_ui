@@ -1,6 +1,6 @@
-import type { FilterParams } from "@/types/video";
+import type { VideoFilters } from "@/types/video_filters";
 
-export const VIDEO_FILTER_DEFAULTS: FilterParams = {
+export const VIDEO_FILTER_DEFAULTS: VideoFilters = {
   limit: 100,
   page: 1,
   order_by: "created_at",

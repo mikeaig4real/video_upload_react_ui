@@ -405,7 +405,10 @@ export default function VideoCard({
               </motion.span>
             </motion.div>
             <motion.div className="text-muted-foreground w-full">
-              Modified {new Date(file.lastModified || file.updated_at!).toLocaleDateString()}
+              Modified{" "}
+              {new Date(
+                file.lastModified || file.updated_at!
+              ).toLocaleDateString()}
             </motion.div>
           </CardFooter>
         </Card>

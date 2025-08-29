@@ -26,8 +26,8 @@ import type {
 } from "@/types/video_player";
 import type { SettingItem } from "@/types/settings";
 import type { UploadResponse } from "@/types/upload";
-import type { FilterParams } from "@/types/video";
 import { VIDEO_FILTER_DEFAULTS } from "@/assets/filters";
+import type { VideoFilters } from "@/types/video_filters";
 interface State {
   hero: HeroStateType;
   theme: ThemeStateType["theme"];
@@ -46,7 +46,7 @@ interface State {
   playerOptions: VideoPlayerOptions;
   playerState: VideoPlayerState;
   appSettings: SettingItem[];
-  videoFilters: FilterParams;
+  videoFilters: VideoFilters;
 }
 
 interface Actions {
@@ -76,7 +76,7 @@ interface Actions {
     file: UploadedVideo,
     title: UploadedVideo["title"]
   ) => void;
-  setVideoFilters: (filters: FilterParams) => void;
+  setVideoFilters: (filters: VideoFilters) => void;
 }
 
 export const useStore = create<State & Actions>()(

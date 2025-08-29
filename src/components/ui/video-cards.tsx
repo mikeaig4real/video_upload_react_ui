@@ -80,9 +80,13 @@ export default function VideoCards({
       .sort((a, b) => {
         // Client-side sorting
         const aValue =
-          currentFilters.order_by === "created_at" ? a.created_at : a.updated_at;
+          currentFilters.order_by === "created_at"
+            ? a.created_at
+            : a.updated_at;
         const bValue =
-          currentFilters.order_by === "created_at" ? b.created_at : b.updated_at;
+          currentFilters.order_by === "created_at"
+            ? b.created_at
+            : b.updated_at;
 
         if (!aValue || !bValue) return 0;
 

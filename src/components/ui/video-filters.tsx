@@ -16,11 +16,11 @@ import { Badge } from "@/components/ui/badge";
 import { X, Filter, Settings } from "lucide-react";
 import {
   type VideoFilters,
-  DEFAULT_FILTERS,
   type OrderBy,
   type Order,
 } from "@/types/video_filters";
 import type { UploadedVideo } from "@/types/uploaded_video";
+import { VIDEO_FILTER_DEFAULTS } from "@/assets/filters";
 
 interface VideoFiltersProps {
   onFiltersChange: (filters: VideoFilters) => void;
@@ -69,7 +69,7 @@ export default function VideoFiltersComponent({
   debounceDelay = 2000,
   isLoading = false,
 }: VideoFiltersProps) {
-  const [filters, setFilters] = useState<VideoFilters>(DEFAULT_FILTERS);
+  const [filters, setFilters] = useState<VideoFilters>(VIDEO_FILTER_DEFAULTS);
   const [isOpen, setIsOpen] = useState(false);
 
   const debouncedOnFiltersChange = useCallback(
@@ -99,7 +99,7 @@ export default function VideoFiltersComponent({
   );
 
   const clearFilters = useCallback(() => {
-    setFilters(DEFAULT_FILTERS);
+    setFilters(VIDEO_FILTER_DEFAULTS);
   }, []);
 
   const getActiveFiltersCount = () => {
