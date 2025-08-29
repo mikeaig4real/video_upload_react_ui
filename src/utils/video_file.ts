@@ -77,7 +77,7 @@ export function generateVideoMetadata(
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const thumbnail_url = canvas.toDataURL("image/png");
-      const [title, ] = extractFileNameAndExt(file.name);
+      const [title] = extractFileNameAndExt(file.name);
       const upload_hash = await makeVideoHash(file, 128);
 
       // attach ui/file metadata
@@ -95,6 +95,7 @@ export function generateVideoMetadata(
       file.duration = duration;
       file.width = width;
       file.height = height;
+      file.label = getVideoPixel({ width, height });
       // URL.revokeObjectURL(url);
       video.remove();
       canvas.remove();

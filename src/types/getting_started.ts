@@ -1,17 +1,21 @@
+import {
+  FORM_INPUT_MAX,
+  FORM_INPUT_MIN,
+  PASSWORD_REGEX,
+} from "@/assets/constants";
 import { z } from "zod";
-export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
-const MIN = 10;
-const MAX = 50;
+import { userSchema } from "@/types/user";
+
 const input_constraint = z
   .string()
-  .min(MIN, {
-    message: `At least ${MIN} characters expected`,
+  .min(FORM_INPUT_MIN, {
+    message: `At least ${FORM_INPUT_MIN} characters expected`,
   })
-  .max(MAX, {
-    message: `At most ${MAX} characters expected`,
+  .max(FORM_INPUT_MAX, {
+    message: `At most ${FORM_INPUT_MAX} characters expected`,
   });
 
-const password_constraint = input_constraint.regex(passwordRegex, {
+const password_constraint = input_constraint.regex(PASSWORD_REGEX, {
   message: "😠 👆 (Don't like to repeat)",
 });
 export const registerSchema = z
@@ -34,7 +38,7 @@ export const registerSchema = z
 export const logInSchema = z.object({
   username: z.email(),
   password: password_constraint,
-} );
+});
 
 export type LogIn = z.infer<typeof logInSchema>;
 
@@ -45,23 +49,10 @@ export type FormType = "login" | "register";
 export const responseSchema = z.object({
   access_token: z.string(),
   token_type: z.string(),
-  user: z.object( {
-    id: z.union([z.string(), z.number()]),
-    username: z.string(),
-    email: z.email()
-  })
-} );
+  user: userSchema,
+});
 
-export type ResponseSchemaType = z.infer<typeof responseSchema>
-
-// {
-//   "access_token": "string",
-//   "token_type": "string",
-//   "user": {
-//     "username": "string",
-//     "email": "user@example.com"
-//   }
-// }
+export type ResponseSchemaType = z.infer<typeof responseSchema>;
 
 export type GettingStartedState = {
   formType: FormType;

@@ -14,12 +14,7 @@ export function VideoUpload() {
   const handleUpload = () => {
     log(allowedVideos);
     notify(API.UploadAPI.uploadMultipleFilesToCloudBucket(allowedVideos), {
-      success: (data) => {
-        log(data);
-        return "File Uploaded";
-      },
       loading: "Uploading file...",
-      error: "Upload Failed."
     });
     navigate("/dashboard/videos");
   };

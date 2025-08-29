@@ -26,7 +26,9 @@ api.interceptors.response.use(
     } = error;
     const message =
       data?.description || data?.message || "Something went wrong";
-    toast.error(message);
+    toast.error(message, {
+      duration: 4000,
+    });
     if (!API_BASE_URL) return;
     if (status === 401 || status === 403) {
       // todo: implement refresh token

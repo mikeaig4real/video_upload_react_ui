@@ -5,9 +5,12 @@ import type Player from "video.js/dist/types/player";
 import "video.js/dist/video-js.css";
 
 interface VideoJSProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options: any;
-  onReady?: ( player: Player ) => void;
+  options: unknown & {
+    autoplay?: boolean;
+    controls?: boolean;
+    sources?: Array<{ src: string; type: string }>;
+  };
+  onReady?: (player: Player) => void;
 }
 
 export const VideoJS: React.FC<VideoJSProps> = ({ options, onReady }) => {

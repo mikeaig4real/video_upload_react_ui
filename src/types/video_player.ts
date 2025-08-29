@@ -10,6 +10,5 @@ export type VideoPlayerOptions = {
 
 export type VideoPlayerState = {
   status: "ready" | "waiting" | "dispose" | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  player: any;
+  player: unknown;
 };

@@ -57,7 +57,7 @@ const Dashboard = () => {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <div className="safe-top flex flex-1 flex-col max-h-dvh scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-black overflow-hidden overflow-y-auto scrollbar-track-gray-200 ">
+        <div className="safe-top flex flex-1 flex-col max-h-dvh scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-black scrollbar-track-gray-200 overflow-hidden overflow-y-auto ">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <Outlet />
