@@ -1,8 +1,8 @@
 import { type UploadedVideo } from "@/types/uploaded_video";
 import api from "@/utils/axios";
 import {
-  type UploadInput,
-  type UploadOutput,
+  type GetUploadParams,
+  type GetUploadParamsResponse,
   type UploadResponse,
 } from "@/types/upload";
 import { log } from "@/utils/logger";
@@ -16,7 +16,7 @@ import { makeFinalUploadMessage } from "@/utils/file_upload_errors";
 
 export async function getParams({ file }: { file: UploadedVideo }) {
   try {
-    const uploadedInputParams: UploadInput | UploadedVideo = {
+    const uploadedInputBody: GetUploadParams | UploadedVideo = {
       type: file.type,
       title: file.title!,
       size: file.size,
@@ -24,9 +24,10 @@ export async function getParams({ file }: { file: UploadedVideo }) {
       upload_status: file.upload_status!,
     };
     useStore.getState().setVideoStatus(file, "processing");
-    const res = await api.get<APIResponse<UploadOutput>>("/upload/params", {
-      params: uploadedInputParams,
-    });
+    const res = await api.post<APIResponse<GetUploadParamsResponse>>(
+      "/uploader/params",
+      uploadedInputBody
+    );
     return res.data;
   } catch (error) {
     log({
@@ -42,7 +43,7 @@ export async function uploadToCloudBucket({
   uploadOutputParams,
 }: {
   file: UploadedVideo;
-  uploadOutputParams: UploadOutput;
+  uploadOutputParams: GetUploadParamsResponse;
 }) {
   try {
     const formData = new FormData();
@@ -124,6 +125,8 @@ export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   const resolvedPromises = await Promise.allSettled(promises); // will not throw to notify rather attach
   log(resolvedPromises);
   const message = makeFinalUploadMessage(resolvedPromises);
-  toast.message(message);
+  toast.message(message, {
+    duration: 5000
+  });
   return resolvedPromises;
 }

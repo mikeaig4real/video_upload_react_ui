@@ -8,7 +8,7 @@ const firstName = z.string().optional();
 const bio = z.string().optional();
 const location = z.string().optional();
 const website = z.url().optional();
-const avatar = z.union([z.string(), z.url()]);
+const avatar = z.union([z.string(), z.url()]).optional();
 const email = z.email();
 const username = z.string();
 

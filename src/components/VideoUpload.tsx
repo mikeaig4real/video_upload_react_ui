@@ -12,7 +12,7 @@ export function VideoUpload() {
   const navigate = useNavigate();
   const allowedVideos = filterVideosByStatus(uploadedFiles, ["error", "idle"]);
   const handleUpload = () => {
-    log(allowedVideos);
+    log({ allowedVideos });
     notify(API.UploadAPI.uploadMultipleFilesToCloudBucket(allowedVideos), {
       loading: "Uploading file...",
     });

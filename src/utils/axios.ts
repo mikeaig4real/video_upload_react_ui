@@ -2,7 +2,7 @@ import { API_BASE_URL, REDIRECT_URL } from "@/assets/constants";
 import { useStore } from "@/store/useStore";
 import axios from "axios";
 import { toast } from "sonner";
-import { warn } from "@/utils/logger";
+import { warn, log } from "@/utils/logger";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -19,16 +19,20 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    const {
-      response: { status, data },
-    } = error;
+  ( error ) =>
+  {
+    log({
+      error
+    })
     const message =
-      data?.description || data?.message || "Something went wrong";
+      error?.response?.data?.description ||
+      error?.response?.data?.message ||
+      error?.message ||
+      "Something went wrong";
     toast.error(message, {
       duration: 4000,
     });
-    if (status === 401 || status === 403) {
+    if (error?.response?.status === 401 || error?.response?.status === 403) {
       // todo: implement refresh token
       warn("Unauthorized - redirecting and clearing session");
       useStore.getState().logOut();
