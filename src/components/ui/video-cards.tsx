@@ -1,4 +1,3 @@
-"use client";
 import { useState, useCallback, useMemo } from "react";
 import VideoCard from "./video-card";
 import VideoFiltersComponent from "./video-filters";
