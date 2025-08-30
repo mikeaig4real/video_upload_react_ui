@@ -17,6 +17,7 @@ import { API_BASE_URL } from "@/assets/constants";
 
 let fakeProgress = 10;
 let fakeInterval: NodeJS.Timeout | null = null;
+let failCount = 0;
 export async function getParams({ file }: { file: UploadedVideo }) {
   try {
     const uploadedInputBody: GetUploadParams | UploadedVideo = {
@@ -32,6 +33,7 @@ export async function getParams({ file }: { file: UploadedVideo }) {
       asset_id: file.asset_id,
     };
     useStore.getState().setVideoStatus(file, "processing");
+    if (!API_BASE_URL) return { data: null };
     const res = await api.post<APIResponse<GetUploadParamsResponse>>(
       "/uploader/params",
       uploadedInputBody
@@ -80,7 +82,12 @@ export async function uploadToCloudBucket({
       toast.error(
         "Nothing went wrong, this is a simulation, you can retry at uploads"
       );
-      useStore.getState().setVideoStatus(file, "error");
+      if (failCount > 1) {
+        useStore.getState().setVideoStatus(file, "completed");
+      } else {
+        useStore.getState().setVideoStatus(file, "error");
+      }
+      failCount++;
       fakeProgress = 10;
     }, 7000);
     if (!API_BASE_URL) return null;
@@ -124,10 +131,9 @@ export async function uploadFileToCloudBucket(file: UploadedVideo) {
 export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   const promises = files.map(async (file) => {
     const upload_details = await uploadFileToCloudBucket(file); // throws to Promise.all/ rejected in Promise.allSettled
-    if (!API_BASE_URL) return file;
+    if (!API_BASE_URL || !upload_details) return file;
     useStore.getState().finalizeUpload(file, upload_details);
-    try
-    {
+    try {
       // throw new Error("Failed to upload video"); testing
       await withRetry(
         async () => {
@@ -150,7 +156,7 @@ export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   log(resolvedPromises);
   const message = makeFinalUploadMessage(resolvedPromises);
   toast.message(message, {
-    duration: 5000
+    duration: 5000,
   });
   return resolvedPromises;
 }
