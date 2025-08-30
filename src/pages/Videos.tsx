@@ -19,14 +19,15 @@ const Videos = () => {
   useEffect(() => {
     notify(API.VideoAPI.getVideos(videoFilters), {
       success: ({ data }: { data: UploadedVideo[] }) => {
-        log(data)
-        setUploadedFiles(data);
-        return "Done";
+        log(data);
+        setUploadedFiles([...uploadedFiles, ...data]);
+        return data.length ? "Done" : "No videos...";
       },
       loading: "Loading..",
       error: "Could not load",
     });
-  }, [setUploadedFiles, videoFilters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoFilters]);
   return allowedVideos.length ? (
     <VideoCards videos={allowedVideos} />
   ) : (

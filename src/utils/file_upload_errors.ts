@@ -29,15 +29,16 @@ export function makeFinalUploadMessage(
   const succeeded = resolvedUploads.filter(
     (r) => r.status === "fulfilled"
   ).length;
+  const failedSuffix = "files failed to finalize/upload. if processing, wait for 24hrs, otherwise retry at /upload.";
   const failed = resolvedUploads.filter((r) => r.status === "rejected").length;
   let message = `Upload completed: ${succeeded} succeeded, ${failed} failed, out of ${total} files.`;
   if (succeeded === total) {
     message = `All ${total} files uploaded successfully!`;
   } else if (failed === total) {
-    message = `All ${total} files failed to upload. Please try again.`;
+    message = `All ${total} ${failedSuffix}`;
   } else if (failed > 0) {
-    message +=
-      " Some files failed to upload. Please check /upload to retry if needed.";
+    message += ` Some ${failedSuffix}`;
   }
+  // "videos/1/When that check clear @taylor_thatdancer @BluPrint01"
   return message;
 }

@@ -14,15 +14,15 @@ export const upload_params = z.object({
   size: z.number().min(0).max(MAX_VIDEO_SIZE),
 });
 
-export const uploadOutputSchema = z.object({
+export const getUploadParamsResponse = z.object({
   upload_url: z.url(),
   fields: z.record(z.string(), z.any()),
   asset_id: z.string(),
   upload_provider: upload_bucket_enum,
 });
 
-export type UploadInput = z.infer<typeof upload_params>;
+export type GetUploadParams = z.infer<typeof upload_params>;
 
-export type UploadOutput = z.infer<typeof uploadOutputSchema>;
+export type GetUploadParamsResponse = z.infer<typeof getUploadParamsResponse>;
 
 export type UploadResponse = CloudinaryUploadResponse & {};

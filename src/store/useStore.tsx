@@ -195,7 +195,8 @@ export const useStore = create<State & Actions>()(
               // update ui/file metadata
               v.upload_details = upload_details; // just for safe keeping incase something changes
               v.upload_progress = 100;
-
+              v.upload_status = "processing"
+              
               const {
                 playback_url,
                 secure_url,
