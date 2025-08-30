@@ -111,7 +111,7 @@ export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
     useStore.getState().finalizeUpload(file, upload_details);
     try
     {
-      throw new Error("Failed to upload video");
+      // throw new Error("Failed to upload video"); testing
       await withRetry(
         async () => {
           await createVideo(file);
