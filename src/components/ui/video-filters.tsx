@@ -119,7 +119,7 @@ export default function VideoFiltersComponent({
   const activeFiltersCount = getActiveFiltersCount();
 
   return (
-    <div className="absolute top-[-0.5rem] right-4 z-60">
+    <div className="sticky top-[-0.5rem] right-4 z-60">
       <AnimatePresence>
         {!isOpen && (
           <motion.div
@@ -132,7 +132,7 @@ export default function VideoFiltersComponent({
               variant="outline"
               size="sm"
               onClick={() => setIsOpen(true)}
-              className="flex items-center gap-2 bg-background/95 backdrop-blur-sm border shadow-lg hover:shadow-xl transition-all absolute top-[-1rem] right-4 z-50"
+              className="flex items-center gap-2 bg-background/95 backdrop-blur-sm border shadow-lg hover:shadow-xl transition-all sticky top-[-1rem] right-4 z-50"
             >
               <Settings className="h-4 w-4" />
               Filters

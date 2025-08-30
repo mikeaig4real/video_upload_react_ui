@@ -115,8 +115,7 @@ export const checkVideoDuplicate = (
   uploaded: UploadedVideo,
   existing: UploadedVideo[]
 ) => {
-  if (existing.some((video) => video.id === uploaded.id)) return true;
-  return false;
+  return ( existing.some( ( video ) => video.upload_hash === uploaded.upload_hash ) );
 };
 
 export async function makeVideoHash(file: File, chunk = 8): Promise<string> {
@@ -143,6 +142,31 @@ export async function makeVideoHash(file: File, chunk = 8): Promise<string> {
 
   // Convert to hex string (64 chars)
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+export function resolveUploadedVideos(
+  fromState: UploadedVideo[],
+  fromDb: UploadedVideo[]
+) {
+  const resolved: UploadedVideo[] = [];
+
+  const seen: {
+    [key: string]: boolean;
+  } = {};
+
+  for (const uploadedVideo of fromDb) {
+    if (!seen[uploadedVideo.upload_hash!]) {
+      seen[uploadedVideo.upload_hash!] = true;
+      resolved.push(uploadedVideo);
+    }
+  }
+  for (const uploadedVideo of fromState) {
+    if (!seen[uploadedVideo.upload_hash!]) {
+      seen[uploadedVideo.upload_hash!] = true;
+      resolved.push(uploadedVideo);
+    }
+  }
+  return resolved;
 }
 
 // export function makeVideoHash(file: UploadedVideo): string {
