@@ -24,7 +24,12 @@ export async function getParams({ file }: { file: UploadedVideo }) {
       title: file.title!,
       size: file.size,
       upload_hash: file.upload_hash!,
-      upload_status: file.upload_status!,
+      description: file.description,
+      duration: file.duration,
+      is_public: file.is_public,
+      label: file.label,
+      upload_provider: file.upload_provider,
+      asset_id: file.asset_id,
     };
     useStore.getState().setVideoStatus(file, "processing");
     const res = await api.post<APIResponse<GetUploadParamsResponse>>(
@@ -121,7 +126,9 @@ export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
     const upload_details = await uploadFileToCloudBucket(file); // throws to Promise.all/ rejected in Promise.allSettled
     if (!API_BASE_URL) return file;
     useStore.getState().finalizeUpload(file, upload_details);
-    try {
+    try
+    {
+      throw new Error("Failed to upload video");
       await withRetry(
         async () => {
           await createVideo(file);

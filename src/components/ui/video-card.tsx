@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+// import { resolveUploadedVideos } from "@/utils/video_file";
 import {
   X,
   Play,
@@ -216,10 +217,11 @@ export default function VideoCard({
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="flex items-center gap-1">
                 <Film className="h-3 w-3" />
-                {getVideoPixel({
-                  width: file.width!,
-                  height: file.height!,
-                })}
+                {file?.label ||
+                  getVideoPixel({
+                    width: file.width!,
+                    height: file.height!,
+                  })}
               </Badge>
               {statusInfo && (
                 <Badge

@@ -7,6 +7,7 @@ import { filterVideosByStatus } from "@/utils/uploaded_videos";
 import { useEffect } from "react";
 import { Link } from "react-router";
 import type { UploadedVideo } from "@/types/uploaded_video";
+import { resolveUploadedVideos } from "@/utils/video_file";
 import { log } from "@/utils/logger";
 
 const Videos = () => {
@@ -20,7 +21,7 @@ const Videos = () => {
     notify(API.VideoAPI.getVideos(videoFilters), {
       success: ({ data }: { data: UploadedVideo[] }) => {
         log(data);
-        setUploadedFiles([...uploadedFiles, ...data]);
+        setUploadedFiles(resolveUploadedVideos(uploadedFiles, data));
         return data.length ? "Done" : "No videos...";
       },
       loading: "Loading..",

@@ -13,6 +13,7 @@ import { videoFileSchema, type UploadedVideo } from "@/types/uploaded_video";
 import { checkVideoDuplicate, generateVideoMetadata } from "@/utils/video_file";
 import { log } from "@/utils/logger";
 import { filterVideosByStatus } from "@/utils/uploaded_videos";
+import { resolveUploadedVideos } from "@/utils/video_file";
 
 const mainVariant = {
   initial: {
@@ -66,7 +67,7 @@ export const FileUpload = () => {
     toast.success("Processed & added files.", {
       id: toastId,
     });
-    setUploadedFiles([...uploadedFiles, ...newFiles]);
+    setUploadedFiles(resolveUploadedVideos(uploadedFiles, newFiles));
   };
 
   const handleClick = () => {
