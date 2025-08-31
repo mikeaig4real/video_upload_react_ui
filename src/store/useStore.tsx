@@ -79,14 +79,6 @@ interface Actions {
   setVideoFilters: (filters: VideoFilters) => void;
 }
 
-export const dummyUser: UserStateType["user"] = {
-  id: 1,
-  username: "john_doe",
-  email: "john_doe@example.com",
-};
-
-export const dummyToken = "this_is_the_matrix";
-
 export const useStore = create<State & Actions>()(
   persist(
     immer((set, get) => ({
@@ -238,8 +230,8 @@ export const useStore = create<State & Actions>()(
       hero: hero_asset,
       theme: get()?.theme || DEFAULT_THEME,
       formType: DEFAULT_FORM_TYPE,
-      token: get()?.token || dummyToken,
-      user: get()?.user || dummyUser,
+      token: get()?.token,
+      user: get()?.user,
       navMain,
       navMainActive: 1,
       navSecondary,
@@ -266,10 +258,10 @@ export const useStore = create<State & Actions>()(
     {
       name: PERSIST_KEY,
       partialize: (state) => ({
-        // token: state.token,
-        // user: state.user,
+        token: state.token,
+        user: state.user,
         theme: state.theme,
-        // appSettings: state.appSettings,
+        appSettings: state.appSettings,
       }),
     }
   )

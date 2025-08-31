@@ -10,7 +10,6 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  if (!API_BASE_URL) return config;
   const token = useStore.getState().token;
   if (token && config?.headers) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -32,7 +31,6 @@ api.interceptors.response.use(
     toast.error(message, {
       duration: 4000,
     });
-    if (!API_BASE_URL) return;
     if (error?.response?.status === 401 || error?.response?.status === 403) {
       // todo: implement refresh token
       warn("Unauthorized - redirecting and clearing session");

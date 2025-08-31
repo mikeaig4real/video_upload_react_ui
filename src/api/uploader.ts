@@ -15,9 +15,6 @@ import { withRetry } from "@/utils/retry";
 import { makeFinalUploadMessage } from "@/utils/file_upload_errors";
 import { API_BASE_URL } from "@/assets/constants";
 
-let fakeProgress = 10;
-let fakeInterval: NodeJS.Timeout | null = null;
-let failCount = 0;
 export async function getParams({ file }: { file: UploadedVideo }) {
   try {
     const uploadedInputBody: GetUploadParams | UploadedVideo = {
@@ -33,7 +30,6 @@ export async function getParams({ file }: { file: UploadedVideo }) {
       asset_id: file.asset_id,
     };
     useStore.getState().setVideoStatus(file, "processing");
-    if (!API_BASE_URL) return { data: null };
     const res = await api.post<APIResponse<GetUploadParamsResponse>>(
       "/uploader/params",
       uploadedInputBody
@@ -73,24 +69,6 @@ export async function uploadToCloudBucket({
       },
     };
     useStore.getState().setVideoStatus(file, "uploading");
-    fakeInterval = setInterval(() => {
-      fakeProgress += 10;
-      useStore.getState().setVideoProgress(file, fakeProgress);
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(fakeInterval!);
-      toast.error(
-        "Nothing went wrong, this is a simulation, you can retry at uploads"
-      );
-      if (failCount > 1) {
-        useStore.getState().setVideoStatus(file, "completed");
-      } else {
-        useStore.getState().setVideoStatus(file, "error");
-      }
-      failCount++;
-      fakeProgress = 10;
-    }, 7000);
-    if (!API_BASE_URL) return null;
     const res = await axios.post<UploadResponse>(
       uploadOutputParams.upload_url,
       formData,
