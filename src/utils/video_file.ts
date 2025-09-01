@@ -161,7 +161,7 @@ export function resolveUploadedVideos(
     }
   }
   for (const uploadedVideo of fromState) {
-    if (!seen[uploadedVideo.upload_hash!]) {
+    if (!seen[uploadedVideo.upload_hash!] && uploadedVideo.upload_status !== "completed") { // new condition to address deleted videos from db (from else where)
       seen[uploadedVideo.upload_hash!] = true;
       resolved.push(uploadedVideo);
     }

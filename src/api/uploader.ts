@@ -13,7 +13,6 @@ import { useStore } from "@/store/useStore";
 import { createVideo } from "./video";
 import { withRetry } from "@/utils/retry";
 import { makeFinalUploadMessage } from "@/utils/file_upload_errors";
-import { API_BASE_URL } from "@/assets/constants";
 
 export async function getParams({ file }: { file: UploadedVideo }) {
   try {
@@ -109,10 +108,9 @@ export async function uploadFileToCloudBucket(file: UploadedVideo) {
 export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   const promises = files.map(async (file) => {
     const upload_details = await uploadFileToCloudBucket(file); // throws to Promise.all/ rejected in Promise.allSettled
-    if (!API_BASE_URL || !upload_details) return file;
     useStore.getState().finalizeUpload(file, upload_details);
     try {
-      // throw new Error("Failed to upload video"); testing
+      // throw new Error("Failed to upload video"); // testing
       await withRetry(
         async () => {
           await createVideo(file);
