@@ -8,7 +8,7 @@ async function initEmbed() {
   const videoElement = document.getElementById(
     "video-player"
   ) as HTMLVideoElement;
-  console.log("hi")
+  
   if (!videoElement) return;
 
   let player;
