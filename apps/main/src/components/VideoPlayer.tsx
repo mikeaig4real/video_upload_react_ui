@@ -64,7 +64,7 @@ export const VideoJS: React.FC<VideoJSProps> = ({
     if (!playerRef.current) {
       // Create a <video-js> element dynamically
       const videoElement = document.createElement("video-js");
-      videoElement.classList.add("vjs-big-play-centered");
+      videoElement.classList.add("vjs-big-play-centered", "vjs-fluid");
 
       videoRef.current?.appendChild(videoElement);
 
