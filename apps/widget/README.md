@@ -38,25 +38,28 @@ This widget is designed to be embedded into external websites or apps via an `<i
 
 ```bash
 pnpm install
+```
 
 ### Development
 
 ```bash
 pnpm run dev
+```
 
 ### Build
 
 ```bash
 pnpm run build
+```
 
 ### Embedding the Widget
 
-To embed the video player widget in an external site, use the following HTML code:
+To embed the video player widget in an external site, you could do like so:
 
 ```html
 <iframe
   src="https://your-widget-url.com/embed/:id"
-  width="640"
+  width="640" 
   height="360"
   frameborder="0"
   allowfullscreen
@@ -64,6 +67,14 @@ To embed the video player widget in an external site, use the following HTML cod
 ```
 
 Replace `https://your-widget-url.com/embed/:id` with the actual URL of your widget, including the video ID you want to embed else a default video will be loaded.
+
+#### Notes
+
+You can adjust the width and height values to fit your layout — the video player inside will automatically resize.
+
+Always include allowfullscreen so users can expand the video.
+
+Replace the id parameter in the URL with the ID of the video you want to embed.
 
 ### Environment Variables
 
