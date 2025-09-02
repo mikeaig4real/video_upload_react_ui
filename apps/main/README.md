@@ -36,36 +36,36 @@ A modern video upload and management UI built with React, TypeScript, Vite, Zust
 ### Prerequisites
 
 - Node.js >= 18
-- npm >= 9
+- pnpm >= 6
 
 ### Installation
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Development
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### Linting
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 ### Build
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ### Preview
 
 ```bash
-npm run preview
+pnpm run preview
 ```
 
 ## Environment Variables
