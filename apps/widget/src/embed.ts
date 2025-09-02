@@ -8,7 +8,7 @@ async function initEmbed() {
   const videoElement = document.getElementById(
     "video-player"
   ) as HTMLVideoElement;
-  
+
   if (!videoElement) return;
 
   let player;
@@ -29,8 +29,6 @@ async function initEmbed() {
           },
         ],
       });
-
-      console.log(`Loaded video: ${video.title}`, player);
     } else {
       const fallbackSources = [
         {
@@ -49,8 +47,6 @@ async function initEmbed() {
         preload: "auto",
         sources: fallbackSources,
       });
-
-      console.log("Loaded fallback preview video", player);
     }
   } catch (err) {
     console.error("Error loading video:", err);
