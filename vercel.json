@@ -1,0 +1,11 @@
+{
+  "projects": {
+    "main": {
+      "rootDirectory": "apps/main"
+    },
+    "widget": {
+      "rootDirectory": "apps/widget"
+    }
+  },
+  "installCommand": "pnpm install --shamefully-hoist"
+}
