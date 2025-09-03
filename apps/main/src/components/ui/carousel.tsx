@@ -38,7 +38,8 @@ const Slide = ({
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
       <li
-        ref={slideRef}
+        ref={ slideRef }
+        title={current === index ? "Click on play button to play" : "Click to scroll into view"}
         className={`flex flex-1 flex-col items-center justify-center relative z-60
               text-center text-white opacity-100 transition-all duration-300 ease-in-out 
               ${
@@ -195,6 +196,7 @@ export default function Carousel({
 
   const handleSlideClick = (index: number) => {
     if (current !== index) {
+      if (offTrigger) offTrigger()
       setCurrent(index);
     }
   };
@@ -234,7 +236,7 @@ export default function Carousel({
         className={`z-50 absolute flex
               ${
                 isMobile
-                  ? "flex-col items-center justify-between top-0 right-[2rem] h-full"
+                  ? "flex-col items-center justify-between top-0 right-[2rem] h-[80svh]"
                   : "justify-center top-[calc(100%+1rem)] w-full"
               }`}
       >
