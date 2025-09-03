@@ -11,7 +11,7 @@ import { useEffect } from "react";
 
 export function ModeToggle() {
   const {
-    setTheme, theme
+    setTheme, theme, setCurrTheme
   } = useStore();
   useEffect(() => {
     const root = window.document.documentElement;
@@ -25,10 +25,13 @@ export function ModeToggle() {
         : "light";
 
       root.classList.add(systemTheme);
+      setCurrTheme(systemTheme);
       return;
     }
 
-    root.classList.add(theme);
+    root.classList.add( theme );
+    setCurrTheme(theme)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
   return (
     <DropdownMenu>

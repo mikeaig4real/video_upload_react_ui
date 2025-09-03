@@ -31,6 +31,7 @@ import type { VideoFilters } from "@shared/types/video_filters";
 interface State {
   hero: HeroStateType;
   theme: ThemeStateType["theme"];
+  currTheme: ThemeStateType["theme"];
   formType: GettingStartedState["formType"];
   token: TokenStateType["token"];
   user: UserStateType["user"];
@@ -51,6 +52,7 @@ interface State {
 
 interface Actions {
   setTheme: ThemeStateType["setTheme"];
+  setCurrTheme: ThemeStateType["setTheme"];
   setFormType: GettingStartedState["setFormType"];
   setToken: TokenStateType["setToken"];
   clearToken: TokenStateType["clearToken"];
@@ -61,7 +63,7 @@ interface Actions {
   setSiteHeaderText: (description: NavType[number]["description"]) => void;
   setUploadedFiles: (files: UploadedVideo[]) => void;
   setIsDialogOpen: (isOpen: boolean) => void;
-  setActiveVideo: (video: OptionalUploadedVideo) => void;
+  setActiveVideo: (video: OptionalUploadedVideo | null) => void;
   setActiveSources: (sources: VideoSource[]) => void;
   setPlayerOptions: (options: VideoPlayerOptions) => void;
   setPlayerState: (playerState: VideoPlayerState) => void;
@@ -85,6 +87,10 @@ export const useStore = create<State & Actions>()(
       setTheme: (theme: Theme) =>
         set((state) => {
           state.theme = theme;
+        }),
+      setCurrTheme: (currTheme: Theme) =>
+        set((state) => {
+          state.currTheme = currTheme;
         }),
       setFormType(type) {
         set((state) => {
@@ -229,6 +235,7 @@ export const useStore = create<State & Actions>()(
       },
       hero: hero_asset,
       theme: get()?.theme || DEFAULT_THEME,
+      currTheme: get()?.currTheme || DEFAULT_THEME,
       formType: DEFAULT_FORM_TYPE,
       token: get()?.token,
       user: get()?.user,

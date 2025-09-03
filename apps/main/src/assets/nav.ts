@@ -3,6 +3,7 @@ import {
   IconFolder,
   IconSettings,
   IconUserCircle,
+  IconVideo
 } from "@tabler/icons-react";
 
 export const navMain = [
@@ -37,7 +38,13 @@ export const navMain = [
 ];
 
 export const navSecondary = [
-  
+  {
+    id: 4,
+    title: "Video Library",
+    url: "/video-library",
+    icon: IconVideo,
+    description: "go to video library",
+  },
 ];
 
 

@@ -4,14 +4,16 @@ import videojs from "video.js";
 import type Player from "video.js/dist/types/player";
 import "video.js/dist/video-js.css";
 
-interface VideoJSProps {
-  options: unknown & {
+export type PlayerOptions = unknown & {
     autoplay?: boolean;
     controls?: boolean;
     responsive?: boolean;
     fluid?: boolean;
     sources?: Array<{ src: string; type: string }>;
-  };
+  }
+
+export interface VideoJSProps {
+  options: PlayerOptions;
   onReady?: (player: Player) => void;
   onPlay?: () => void;
   onPause?: () => void;
