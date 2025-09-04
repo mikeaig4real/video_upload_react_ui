@@ -1,20 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Carousel from "@/components/ui/carousel";
 import { useStore } from "@/store/useStore";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { IconHome, IconLayoutDashboard, IconLogout } from "@tabler/icons-react";
 import CustomHeader from "@/components/ui/custom-header";
+import * as API from "@/api";
 import { log } from "@/utils/logger";
 import type Player from "video.js/dist/types/player";
 import VideoPlayer from "@/components/VideoPlayer";
-import type {
-  UploadedVideo,
-} from "@shared/types/uploaded_video";
+import type { UploadedVideo } from "@shared/types/uploaded_video";
+import { notify } from "@/utils/notify";
 
 const VideoLibrary = () => {
   const [showPlayer, setShowPlayer] = useState(false);
   const {
-    uploadedFiles,
     user,
     logOut,
     playerState,
@@ -23,7 +22,12 @@ const VideoLibrary = () => {
     setActiveVideo,
     setActiveVideoFile,
     setActiveSources,
+    isLoadingLibrary,
+    setIsLoadingLibrary,
     setPlayerOptions,
+    videoFilters,
+    setLibraryList,
+    libraryList,
   } = useStore();
   const handlePlayerReady = (player: Player) => {
     log("Player is ready:", player);
@@ -81,12 +85,29 @@ const VideoLibrary = () => {
       sources: [],
     });
   };
+  useEffect(() => {
+    if (isLoadingLibrary) return;
+    setIsLoadingLibrary(true);
+    notify(API.LibraryAPI.getLibraryList(videoFilters), {
+      success: ({ data }: { data: UploadedVideo[] }) => {
+        log(data);
+        setLibraryList(data);
+        return data.length ? "Done" : "No videos...";
+      },
+      loading: "Loading..",
+      error: "Could not load",
+      finally: () => {
+        setIsLoadingLibrary(false);
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       <div className="relative overflow-hidden w-full h-full py-20">
-        {uploadedFiles.length > 0 ? (
+        {libraryList.length > 0 ? (
           <Carousel
-            slides={uploadedFiles}
+            slides={libraryList}
             toTrigger={
               <VideoPlayer
                 options={playerOptions}
@@ -104,7 +125,7 @@ const VideoLibrary = () => {
           />
         )}
       </div>
-      <div className="absolute bottom-0 right-0">
+      <div className="absolute bottom-[1rem] left-[50%] translate-x-[-50%]">
         <FloatingDock items={links} />
       </div>
     </>

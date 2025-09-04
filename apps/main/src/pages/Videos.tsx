@@ -33,7 +33,7 @@ const Videos = () => {
       }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setIsLoadingVideos, setUploadedFiles, videoFilters]);
+  }, [videoFilters]);
   return allowedVideos.length ? (
     <VideoCards videos={allowedVideos} />
   ) : (

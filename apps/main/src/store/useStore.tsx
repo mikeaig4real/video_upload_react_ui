@@ -51,6 +51,7 @@ interface State {
   isLoadingVideos: boolean;
   isLoadingLibrary: boolean;
   isUploadingFiles: boolean;
+  libraryList: UploadedVideo[];
 }
 
 interface Actions {
@@ -86,6 +87,7 @@ interface Actions {
   setIsLoadingLibrary: (loading: boolean) => void;
   setIsUploadingFiles: (uploading: boolean) => void;
   setActiveVideoFile: (file: UploadedVideo) => void;
+  setLibraryList: (files: UploadedVideo[]) => void;
 }
 
 export const useStore = create<State & Actions>()(
@@ -181,7 +183,7 @@ export const useStore = create<State & Actions>()(
             if (v.id === file.id) v.upload_status = status;
             return v;
           });
-          state.uploadedFiles = newArr
+          state.uploadedFiles = newArr;
         });
       },
       setVideoProgress: (file, progress) => {
@@ -296,6 +298,7 @@ export const useStore = create<State & Actions>()(
       appSettings,
       videoFilters: VIDEO_FILTER_DEFAULTS,
       isLoadingVideos: false,
+      libraryList: [],
       setIsLoadingVideos: (loading) => {
         set((state) => {
           state.isLoadingVideos = loading;
@@ -311,6 +314,11 @@ export const useStore = create<State & Actions>()(
       setIsUploadingFiles: (uploading) => {
         set((state) => {
           state.isUploadingFiles = uploading;
+        });
+      },
+      setLibraryList: (files) => {
+        set((state) => {
+          state.libraryList = files;
         });
       },
     })),
