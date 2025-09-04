@@ -11,24 +11,29 @@ import { resolveUploadedVideos } from "@/utils/video_file";
 import { log } from "@/utils/logger";
 
 const Videos = () => {
-  const { uploadedFiles, videoFilters, setUploadedFiles } = useStore();
+  const { uploadedFiles, videoFilters, setUploadedFiles, isLoadingVideos, setIsLoadingVideos } = useStore();
   const allowedVideos = filterVideosByStatus(uploadedFiles, [
     "completed",
     "processing",
     "uploading",
   ]);
   useEffect(() => {
+    if (isLoadingVideos) return;
+    setIsLoadingVideos(true);
     notify(API.VideoAPI.getVideos(videoFilters), {
       success: ({ data }: { data: UploadedVideo[] }) => {
         log(data);
-        setUploadedFiles(resolveUploadedVideos(uploadedFiles, data));
+        setUploadedFiles( resolveUploadedVideos( uploadedFiles, data ) );
         return data.length ? "Done" : "No videos...";
       },
       loading: "Loading..",
       error: "Could not load",
+      finally: () => {
+        setIsLoadingVideos( false );
+      }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoFilters]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setIsLoadingVideos, setUploadedFiles, videoFilters]);
   return allowedVideos.length ? (
     <VideoCards videos={allowedVideos} />
   ) : (

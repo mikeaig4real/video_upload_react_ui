@@ -38,8 +38,12 @@ const Slide = ({
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
       <li
-        ref={ slideRef }
-        title={current === index ? "Click on play button to play" : "Click to scroll into view"}
+        ref={slideRef}
+        title={
+          current === index
+            ? "Click to play/pause"
+            : "Click to scroll into view"
+        }
         className={`flex flex-1 flex-col items-center justify-center relative z-60
               text-center text-white opacity-100 transition-all duration-300 ease-in-out 
               ${
@@ -110,7 +114,9 @@ const Slide = ({
         {
           <article
             className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${
-              current === index && !triggered ? "opacity-100 visible" : "opacity-0 invisible"
+              current === index && !triggered
+                ? "opacity-100 visible"
+                : "opacity-0 invisible"
             }`}
           >
             <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold  relative">
@@ -180,23 +186,21 @@ export default function Carousel({
   const [current, setCurrent] = useState(0);
   const isMobile = useIsMobile();
 
-  const handlePreviousClick = () =>
-  {
+  const handlePreviousClick = () => {
     if (offTrigger) offTrigger();
     const previous = current - 1;
     setCurrent(previous < 0 ? slides.length - 1 : previous);
   };
 
-  const handleNextClick = () =>
-  {
-    if (offTrigger) offTrigger()
+  const handleNextClick = () => {
+    if (offTrigger) offTrigger();
     const next = current + 1;
     setCurrent(next === slides.length ? 0 : next);
   };
 
   const handleSlideClick = (index: number) => {
     if (current !== index) {
-      if (offTrigger) offTrigger()
+      if (offTrigger) offTrigger();
       setCurrent(index);
     }
   };

@@ -48,6 +48,9 @@ interface State {
   playerState: VideoPlayerState;
   appSettings: SettingItem[];
   videoFilters: VideoFilters;
+  isLoadingVideos: boolean;
+  isLoadingLibrary: boolean;
+  isUploadingFiles: boolean;
 }
 
 interface Actions {
@@ -79,6 +82,10 @@ interface Actions {
     title: UploadedVideo["title"]
   ) => void;
   setVideoFilters: (filters: VideoFilters) => void;
+  setIsLoadingVideos: (loading: boolean) => void;
+  setIsLoadingLibrary: (loading: boolean) => void;
+  setIsUploadingFiles: (uploading: boolean) => void;
+  setActiveVideoFile: (file: UploadedVideo) => void;
 }
 
 export const useStore = create<State & Actions>()(
@@ -174,7 +181,7 @@ export const useStore = create<State & Actions>()(
             if (v.id === file.id) v.upload_status = status;
             return v;
           });
-          get().setUploadedFiles(newArr);
+          state.uploadedFiles = newArr
         });
       },
       setVideoProgress: (file, progress) => {
@@ -183,7 +190,7 @@ export const useStore = create<State & Actions>()(
             if (v.id === file.id) v.upload_progress = progress;
             return v;
           });
-          get().setUploadedFiles(newArr);
+          state.uploadedFiles = newArr;
         });
       },
       finalizeUpload: (file, upload_details) => {
@@ -216,7 +223,7 @@ export const useStore = create<State & Actions>()(
             }
             return v;
           });
-          get().setUploadedFiles(newArr);
+          state.uploadedFiles = newArr;
         });
       },
       setUploadedVideoTitle: (file, title) => {
@@ -225,12 +232,39 @@ export const useStore = create<State & Actions>()(
             if (v.id === file.id) v.title = title;
             return v;
           });
-          get().setUploadedFiles(newArr);
+          state.uploadedFiles = newArr;
         });
       },
       setVideoFilters: (filters) => {
         set((state) => {
           state.videoFilters = filters;
+        });
+      },
+      setActiveVideoFile: (file: UploadedVideo) => {
+        set((state) => {
+          const videoObject: OptionalUploadedVideo = {
+            id: file.id,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified,
+            title: file.title,
+            upload_url: file.upload_url,
+            playback_url: file.playback_url,
+          };
+          const sources = [
+            {
+              src: videoObject.upload_url!,
+              type: videoObject.type!,
+            },
+          ];
+          state.activeVideo = videoObject;
+          state.activeSources = sources;
+          state.playerOptions = {
+            ...state.playerOptions,
+            autoplay: true,
+            sources,
+          };
         });
       },
       hero: hero_asset,
@@ -261,6 +295,24 @@ export const useStore = create<State & Actions>()(
       },
       appSettings,
       videoFilters: VIDEO_FILTER_DEFAULTS,
+      isLoadingVideos: false,
+      setIsLoadingVideos: (loading) => {
+        set((state) => {
+          state.isLoadingVideos = loading;
+        });
+      },
+      isLoadingLibrary: false,
+      setIsLoadingLibrary: (loading) => {
+        set((state) => {
+          state.isLoadingLibrary = loading;
+        });
+      },
+      isUploadingFiles: false,
+      setIsUploadingFiles: (uploading) => {
+        set((state) => {
+          state.isUploadingFiles = uploading;
+        });
+      },
     })),
     {
       name: PERSIST_KEY,

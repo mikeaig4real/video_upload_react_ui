@@ -7,7 +7,6 @@ import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { formatGroupedErrors } from "@/utils/file_upload_errors";
 import VideoCard from "@/components/ui/video-card";
-import { VIDEO_SPECS } from "@/assets/constants";
 import { convertSize } from "@/utils/conversions";
 import {
   videoFileSchema,
@@ -17,6 +16,7 @@ import { checkVideoDuplicate, generateVideoMetadata } from "@/utils/video_file";
 import { log } from "@/utils/logger";
 import { filterVideosByStatus } from "@/utils/uploaded_videos";
 import { resolveUploadedVideos } from "@/utils/video_file";
+import { MAX_UPLOAD_COUNT, VIDEO_SPECS } from "@shared/assets/constants";
 
 const mainVariant = {
   initial: {
@@ -42,9 +42,26 @@ const secondaryVariant = {
 const toastId = "FileUpload";
 export const FileUpload = () => {
   const { uploadedFiles, setUploadedFiles } = useStore();
+  const allowedVideos = filterVideosByStatus(uploadedFiles, ["error", "idle"]);
+  const inProgressVideos = filterVideosByStatus(uploadedFiles, [
+    "processing",
+    "uploading",
+  ]);
+  const activeCount = allowedVideos.length + inProgressVideos.length;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = async (newFiles: UploadedVideo[]) => {
     if (!newFiles.length) return;
+    if (activeCount + newFiles.length > MAX_UPLOAD_COUNT) {
+      toast(
+        `You cannot have more than ${MAX_UPLOAD_COUNT} files uploadable (and/or uploading), please discard ${
+          activeCount - MAX_UPLOAD_COUNT
+        } file(s) or let active uploading/processing videos complete`,
+        {
+          id: toastId,
+        }
+      );
+      return;
+    }
     toast.loading("Processing file(s)...", {
       id: toastId,
     });
@@ -70,7 +87,10 @@ export const FileUpload = () => {
     toast.success("Processed & added files.", {
       id: toastId,
     });
-    setUploadedFiles(resolveUploadedVideos(uploadedFiles, newFiles));
+    setUploadedFiles(
+      resolveUploadedVideos(uploadedFiles, newFiles) // comment to allow duplication
+      // [...uploadedFiles, ...newFiles] // uncomment to test multiple uploadable files
+    );
   };
 
   const handleClick = () => {
@@ -90,8 +110,6 @@ export const FileUpload = () => {
       });
     },
   });
-
-  const allowedVideos = filterVideosByStatus(uploadedFiles, ["error", "idle"]);
 
   return (
     <div className="w-full" {...getRootProps()}>

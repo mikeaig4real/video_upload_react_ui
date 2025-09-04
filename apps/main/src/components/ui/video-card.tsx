@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type {
-  OptionalUploadedVideo,
   UploadedVideo,
 } from "@shared/types/uploaded_video";
 import { useStore } from "@/store/useStore";
@@ -68,14 +67,11 @@ export default function VideoCard({
   showCloseBtn = ["idle", "error"].includes(file.upload_status!),
 }: VideoCardProps) {
   const {
-    setActiveVideo,
-    setActiveSources,
     uploadedFiles,
     setUploadedFiles,
     setUploadedVideoTitle,
-    playerOptions,
-    setPlayerOptions,
     setIsDialogOpen,
+    setActiveVideoFile,
   } = useStore();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(file.title);
@@ -148,29 +144,7 @@ export default function VideoCard({
     //   return;
     // }
 
-    const videoObject: OptionalUploadedVideo = {
-      id: file.id,
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      lastModified: file.lastModified,
-      title: file.title,
-      upload_url: file.upload_url,
-      playback_url: file.playback_url,
-    };
-    const sources = [
-      {
-        src: videoObject.upload_url!,
-        type: videoObject.type!,
-      },
-    ];
-    setActiveVideo(videoObject);
-    setActiveSources(sources);
-    setPlayerOptions({
-      ...playerOptions,
-      autoplay: true,
-      sources,
-    });
+    setActiveVideoFile(file);
     setIsDialogOpen(true);
   };
 

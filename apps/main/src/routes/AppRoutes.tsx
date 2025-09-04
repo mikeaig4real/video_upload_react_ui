@@ -9,7 +9,6 @@ import VideoLibrary from "@/pages/VideoLibrary";
 import Videos from "@/pages/Videos";
 import Upload from "@/pages/Upload";
 import Settings from "@/pages/Settings";
-import EmbedPlayer from "@/pages/EmbedPlayer";
 
 export default function AppRoutes() {
   return (
@@ -17,7 +16,6 @@ export default function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/get-started" element={<GetStarted />} />
       <Route path="/video-library" element={<VideoLibrary />} />
-      <Route path="/embed/:id" element={<EmbedPlayer />} />
       <Route element={<ProtectedPage />}>
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Upload />} />
