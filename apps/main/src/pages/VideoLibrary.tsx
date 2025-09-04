@@ -8,7 +8,6 @@ import { log } from "@/utils/logger";
 import type Player from "video.js/dist/types/player";
 import VideoPlayer from "@/components/VideoPlayer";
 import type {
-  OptionalUploadedVideo,
   UploadedVideo,
 } from "@shared/types/uploaded_video";
 
@@ -22,6 +21,7 @@ const VideoLibrary = () => {
     setPlayerState,
     playerOptions,
     setActiveVideo,
+    setActiveVideoFile,
     setActiveSources,
     setPlayerOptions,
   } = useStore();
@@ -68,34 +68,10 @@ const VideoLibrary = () => {
   ];
 
   const onPlay = (file: UploadedVideo) => {
-    log("i just called onTrigger", file);
     setShowPlayer(true);
-    const videoObject: OptionalUploadedVideo = {
-      id: file.id,
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      lastModified: file.lastModified,
-      title: file.title,
-      upload_url: file.upload_url,
-      playback_url: file.playback_url,
-    };
-    const sources = [
-      {
-        src: videoObject.upload_url!,
-        type: videoObject.type!,
-      },
-    ];
-    setActiveVideo(videoObject);
-    setActiveSources(sources);
-    setPlayerOptions({
-      ...playerOptions,
-      autoplay: true,
-      sources,
-    });
+    setActiveVideoFile(file);
   };
   const onClose = () => {
-    log("Video player closed");
     setShowPlayer(false);
     setActiveVideo(null);
     setActiveSources([]);
