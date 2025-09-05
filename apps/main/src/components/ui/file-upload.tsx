@@ -133,7 +133,7 @@ export const FileUpload = () => {
             Upload Video file
           </p>
           <p className="relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-base mt-2">
-            {`Drag/Drop your files here or click to upload (size must be ${convertSize(
+            {`Drag/Drop your files here (${MAX_UPLOAD_COUNT} MAX) or click to upload (size must be ${convertSize(
               VIDEO_SPECS.maxSize,
               "B",
               "MB"
@@ -148,7 +148,11 @@ export const FileUpload = () => {
           >
             {allowedVideos.length > 0 &&
               allowedVideos.map((file, idx) => (
-                <VideoCard key={`video-card-${idx}`} file={file} idx={idx} />
+                <VideoCard
+                  key={`video-card-${idx}-${file.name}`}
+                  file={file}
+                  idx={idx}
+                />
               ))}
             {!allowedVideos.length && (
               <motion.div
