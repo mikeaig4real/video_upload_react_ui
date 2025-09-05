@@ -18,9 +18,9 @@ const withFile = <P extends object>(
   return (file: UploadedVideo) => {
     log({file})
     return (
-      <div className="bg-yellow-500">
+      // <div className="bg-yellow-500">
         <PlayerComponent {...props} />
-      </div>
+      // </div>
     );
   };
 };
