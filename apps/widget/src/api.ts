@@ -1,14 +1,13 @@
+import { type APIResponse } from "@shared/types/response";
+import { type UploadedVideo } from "@shared/types/uploaded_video";
 import axios from "axios";
-// import { type UploadResponse } from "@shared/types/upload";
-// import type { APIResponse } from "@shared/types/response";
+import { logger } from "./utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-// const VITE_ENV = import.meta.env.VITE_ENV;
-// const IS_PROD = VITE_ENV === "production";
+
 
 export const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 5000,
+  baseURL: API_BASE_URL
 });
 
 api.interceptors.response.use(
@@ -19,12 +18,12 @@ api.interceptors.response.use(
       error?.response?.data?.message ||
       error?.message ||
       "Something went wrong";
-    console.log(message);
+    logger.log(message);
     return Promise.reject(error);
   }
 );
 
-export async function fetchVideo(id: string): Promise<any> {
-  const response = await api.get(`/embed/video${id}`);
+export async function fetchVideo(id: string) {
+  const response = await api.get<APIResponse<UploadedVideo>>(`/library/${id}`);
   return response.data;
 }
