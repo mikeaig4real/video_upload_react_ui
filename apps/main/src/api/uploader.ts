@@ -27,6 +27,8 @@ export async function getParams({ file }: { file: UploadedVideo }) {
       label: file.label,
       upload_provider: file.upload_provider,
       asset_id: file.asset_id,
+      width: file.width,
+      height: file.height,
     };
     useStore.getState().setVideoStatus(file, "processing");
     const res = await api.post<APIResponse<GetUploadParamsResponse>>(

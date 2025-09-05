@@ -11,6 +11,20 @@ import VideoPlayer from "@/components/VideoPlayer";
 import type { UploadedVideo } from "@shared/types/uploaded_video";
 import { notify } from "@/utils/notify";
 
+const withFile = <P extends object>(
+  PlayerComponent: React.ComponentType<P>,
+  props: P
+) => {
+  return (file: UploadedVideo) => {
+    log({file})
+    return (
+      <div className="bg-yellow-500">
+        <PlayerComponent {...props} />
+      </div>
+    );
+  };
+};
+
 const VideoLibrary = () => {
   const [showPlayer, setShowPlayer] = useState(false);
   const {
@@ -56,7 +70,7 @@ const VideoLibrary = () => {
             icon: (
               <IconLayoutDashboard className="h-full w-full text-neutral-500 dark:text-neutral-300" />
             ),
-            url: "/dashboard",
+            url: "/dashboard/upload",
           },
           {
             title: " Log out",
@@ -108,12 +122,10 @@ const VideoLibrary = () => {
         {libraryList.length > 0 ? (
           <Carousel
             slides={libraryList}
-            toTrigger={
-              <VideoPlayer
-                options={playerOptions}
-                onReady={handlePlayerReady}
-              />
-            }
+            toTrigger={withFile(VideoPlayer, {
+              options: playerOptions,
+              onReady: handlePlayerReady,
+            })}
             onTrigger={onPlay}
             triggered={showPlayer}
             offTrigger={onClose}

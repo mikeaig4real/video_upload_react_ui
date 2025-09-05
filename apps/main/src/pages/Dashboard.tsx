@@ -27,12 +27,14 @@ const Dashboard = () => {
     setSiteHeaderText,
   } = useStore();
   const { pathname } = useLocation();
-  useEffect(() => {
+  useEffect( () =>
+  {
     const nav = navMain.find((n) => n.url === pathname);
     if (!nav) return;
     setNavMainActive(nav.id);
     setSiteHeaderText(nav.description);
-  }, [navMain, pathname, setNavMainActive, setSiteHeaderText]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
   const handlePlayerReady = (player: Player) => {
     log("Player is ready:", player);
     setPlayerState({ ...playerState, player, status: "ready" });
