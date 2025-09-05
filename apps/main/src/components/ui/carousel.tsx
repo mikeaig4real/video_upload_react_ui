@@ -52,6 +52,7 @@ const Slide = ({
                   : "w-[70vmin] h-[70vmin] mx-[4vmin]"
               }`}
         onClick={() => handleSlideClick(index)}
+        onTouchEnd={() => handleSlideClick(index)}
         style={{
           transform:
             current !== index
