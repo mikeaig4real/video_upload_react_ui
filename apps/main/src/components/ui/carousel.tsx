@@ -11,7 +11,7 @@ export interface SlideProps {
   index: number;
   current: number;
   handleSlideClick: (index: number) => void;
-  toTrigger: ((file: UploadedVideo) => React.ReactNode) | null;
+  toTrigger: ((file: UploadedVideo, isMobile: boolean) => React.ReactNode) | null;
   onTrigger?: (slide: UploadedVideo) => void;
   offTrigger?: (file?: UploadedVideo) => void;
   triggered: boolean;
@@ -73,7 +73,7 @@ const Slide = ({
         >
           {current === index ? (
             triggered && toTrigger ? (
-              toTrigger(slide)
+              toTrigger(slide, isMobile)
             ) : (
               <img
                 className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
@@ -171,7 +171,7 @@ const CarouselControl = ({
 
 interface CarouselProps {
   slides: UploadedVideo[];
-  toTrigger: ((file: UploadedVideo) => React.ReactNode) | null;
+  toTrigger: ((file: UploadedVideo, isMobile: boolean) => React.ReactNode) | null;
   onTrigger?: (file: UploadedVideo) => void;
   offTrigger?: (file?: UploadedVideo) => void;
   triggered: boolean;

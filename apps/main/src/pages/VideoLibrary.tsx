@@ -15,10 +15,12 @@ const withFile = <P extends object>(
   PlayerComponent: React.ComponentType<P>,
   props: P
 ) => {
-  return (file: UploadedVideo) => {
-    log({file})
+  return (file: UploadedVideo, isMobile: boolean) => {
+    const isPortrait = file.height! > file.width!;
+    const mobileClassName = isPortrait ? `` : `h-full translate-y-[40%]`;
+    const className = isPortrait ? `absolute w-[50%] translate-x-[40%]` : `w-full translate-y-[40%]`;
     return (
-      <div>
+      <div className={isMobile ? mobileClassName : className}>
         <PlayerComponent {...props} />
       </div>
     );
