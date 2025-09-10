@@ -143,21 +143,11 @@ export const FlipCodeSkeleton: React.FC<FlipCodeSkeletonProps> = ({
   embedCode,
   iframeSrc,
 }) => {
-  const [showCode, setShowCode] = useState(true);
+  const [showCode, setShowCode] = useState(false);
 
   return (
     <div className="relative w-full max-w-xl mx-auto">
       <div className="flex gap-2 p-2 bg-transparent rounded-t-md">
-        <button
-          onClick={() => setShowCode(true)}
-          className={`px-3 py-1 rounded-md text-sm font-medium ${
-            showCode
-              ? "bg-gray-300 dark:bg-gray-700"
-              : "hover:bg-gray-200 dark:hover:bg-gray-800"
-          }`}
-        >
-          Code
-        </button>
         <button
           onClick={() => setShowCode(false)}
           className={`px-3 py-1 rounded-md text-sm font-medium ${
@@ -167,6 +157,16 @@ export const FlipCodeSkeleton: React.FC<FlipCodeSkeletonProps> = ({
           }`}
         >
           Preview
+        </button>
+        <button
+          onClick={() => setShowCode(true)}
+          className={`px-3 py-1 rounded-md text-sm font-medium ${
+            showCode
+              ? "bg-gray-300 dark:bg-gray-700"
+              : "hover:bg-gray-200 dark:hover:bg-gray-800"
+          }`}
+        >
+          Code
         </button>
       </div>
 
