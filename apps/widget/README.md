@@ -58,7 +58,7 @@ To embed the video player widget in an external site, you could do like so:
 
 ```html
 <iframe
-  src="https://your-widget-url.com/embed/:id"
+  src="https://widget-url.com/embed/:id"
   width="640" 
   height="360"
   frameborder="0"
@@ -66,7 +66,7 @@ To embed the video player widget in an external site, you could do like so:
 ></iframe>
 ```
 
-Replace `https://your-widget-url.com/embed/:id` with the actual URL of your widget, including the video ID you want to embed else a default video will be loaded.
+Replace `https://widget-url.com/embed/:id` with the actual URL of your widget, including the video ID you want to embed else a default video will be loaded.
 
 #### Notes
 

@@ -43,22 +43,21 @@ export default function VideoForm({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center"
+          className="absolute inset-0 flex items-end justify-start"
           onClick={(e) => {
             e.stopPropagation();
             onClose();
           }}
         >
-          <div className="absolute inset-0 bg-black/20" />
           <motion.div
             initial={{ x: "100%", opacity: 0 }}
             animate={{ x: "20%", opacity: 1 }}
             exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="relative"
+            className="relative z-99 w-[90%] max-h-full translate-x-[-4rem]"
             onClick={(e) => e.stopPropagation()}
           >
-            <Card className="w-96 max-h-[80vh] overflow-y-auto shadow-2xl dark:bg-black">
+            <Card className="w-full h-full overflow-y-auto shadow-2xl dark:bg-black">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg font-semibold">
@@ -67,7 +66,7 @@ export default function VideoForm({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8"
+                    className="h-8 w-8 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       onClose();

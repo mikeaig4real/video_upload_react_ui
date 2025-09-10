@@ -1,4 +1,10 @@
-import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -16,11 +22,10 @@ import {
   AlertCircle,
   CheckCircle,
   Settings,
+  Code,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type {
-  UploadedVideo,
-} from "@shared/types/uploaded_video";
+import type { UploadedVideo } from "@shared/types/uploaded_video";
 import { useStore } from "@/store/useStore";
 import { convertSize } from "@/utils/conversions";
 import { useState } from "react";
@@ -28,6 +33,8 @@ import { motion } from "motion/react";
 import { toast } from "sonner";
 import { formatDuration, getVideoPixel } from "@/utils/video_file";
 import VideoForm, { type VideoFormProps } from "@/components/ui/video-form";
+import CodeBlockDemo from "@/components/CodeBlockDemo";
+import { WIDGET_URL } from "@/assets/constants";
 
 export interface VideoCardProps {
   file: UploadedVideo;
@@ -35,6 +42,7 @@ export interface VideoCardProps {
   showSettingsBtn?: boolean;
   showTitleEditBtn?: boolean;
   showCloseBtn?: boolean;
+  showEmbedBtn?: boolean;
 }
 
 const formFields: VideoFormProps["fields"] = [
@@ -65,6 +73,7 @@ export default function VideoCard({
   showSettingsBtn = ["completed"].includes(file.upload_status!),
   showTitleEditBtn = ["idle", "error"].includes(file.upload_status!),
   showCloseBtn = ["idle", "error"].includes(file.upload_status!),
+  showEmbedBtn = ["completed"].includes(file.upload_status!) && file.is_public!,
 }: VideoCardProps) {
   const {
     uploadedFiles,
@@ -77,6 +86,7 @@ export default function VideoCard({
   const [title, setTitle] = useState(file.title);
   const [fileName, setFileName] = useState(file.title);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const getStatusInfo = () => {
     switch (file.upload_status) {
@@ -157,13 +167,48 @@ export default function VideoCard({
 
   const statusInfo = getStatusInfo();
 
+  const embedCode = `<iframe 
+  src="${WIDGET_URL}/embed/${file.id}" 
+  width="640"
+  height="360"
+  frameborder="0"
+  allowfullscreen>
+</iframe>
+`;
+
   return (
-    <>
-      <motion.div layoutId={idx === 0 ? "file-upload" : "file-upload-" + idx}>
+    <div style={{ perspective: "1000px" }}>
+      <motion.div
+        layoutId={idx === 0 ? "file-upload" : "file-upload-" + idx}
+        style={{
+          transformStyle: "preserve-3d",
+          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+        }}
+        className="z-60 transition-transform duration-500"
+      >
+        {/* Front */}
         <Card
           onClick={(e) => e.stopPropagation()}
-          className="@container/card relative w-full max-w-sm bg-transparent"
+          className={cn(
+            "@container/card relative w-full max-w-sm bg-transparent",
+            isFlipped && "pointer-events-none"
+          )}
+          style={{ backfaceVisibility: "hidden" }}
         >
+          {showEmbedBtn && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-[-0.5rem] right-[-0.5rem] h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white cursor-pointer flex-shrink-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                // onFlip();
+                setIsFlipped(true);
+              }}
+            >
+              <Code className="h-4 w-4" />
+            </Button>
+          )}
           {showCloseBtn && (
             <Button
               variant="ghost"
@@ -388,6 +433,52 @@ export default function VideoCard({
             </motion.div>
           </CardFooter>
         </Card>
+
+        {/* Back */}
+        <Card
+          className={cn(
+            "absolute inset-0 w-full overflow-hidden h-full flex flex-col dark:bg-black",
+            !isFlipped && "pointer-events-none"
+          )}
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+          }}
+        >
+          <div className="absolute top-2 right-2 z-10">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                // onFlip();
+                setIsFlipped(false);
+              }}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <CardHeader className="pb-2">
+            <CardDescription>Embed video with code</CardDescription>
+            <CardTitle
+              className="text-lg font-semibold truncate"
+              title={fileName}
+            >
+              {fileName}
+            </CardTitle>
+          </CardHeader>
+          <CodeBlockDemo
+            files={[
+              {
+                language: "html",
+                filename: "index.html",
+                code: embedCode,
+              },
+            ]}
+          />
+        </Card>
       </motion.div>
       <VideoForm
         video={file}
@@ -396,6 +487,6 @@ export default function VideoCard({
         onClose={() => setIsFormOpen(false)}
         onSave={handleFormSave}
       />
-    </>
+    </div>
   );
 }

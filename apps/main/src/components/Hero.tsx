@@ -8,7 +8,7 @@ const Hero = () => {
   const navigate = useNavigate();
   const { hero, user } = useStore();
   const modValues = ({ to, text }: { to: string; text: string }) => {
-    const modTo = user && to === "/get-started" ? "/dashboard" : to;
+    const modTo = user && to === "/get-started" ? "/dashboard/upload" : to;
     const modText = user && text === "Get Started" ? "Dashboard" : text;
     return {
       modTo,

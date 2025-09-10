@@ -9,6 +9,7 @@ const {
   VITE_REDIRECT_URL = "/get-started",
   VITE_API_BASE_URL,
   VITE_ENV,
+  VITE_WIDGET_URL,
 } = import.meta.env;
 
 // todo: implement some validation with zod
@@ -21,6 +22,7 @@ export const PERSIST_KEY = VITE_PERSIST_KEY;
 export const REDIRECT_URL = VITE_REDIRECT_URL;
 export const API_BASE_URL = VITE_API_BASE_URL;
 export const APP_NAME = VITE_APP_NAME;
+export const WIDGET_URL = VITE_WIDGET_URL;
 export const IS_PROD = VITE_ENV === "production";
 export const VIDEO_SPECS = {
   accept: {
