@@ -198,7 +198,7 @@ export const FlipCodeSkeleton: React.FC<FlipCodeSkeletonProps> = ({
               animate={{ rotateY: 0, opacity: 1 }}
               exit={{ rotateY: -90, opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="absolute inset-0 backface-hidden flex items-center justify-center bg-black"
+              className="absolute inset-0 backface-hidden flex items-center justify-center bg-transparent"
             >
               <iframe
                 src={iframeSrc}
