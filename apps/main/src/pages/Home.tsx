@@ -57,7 +57,7 @@ const screenshots = [
   {
     title: "Top Notch Reliability",
     description:
-      "You can always retry failed uploads, We also help in automatic retries, automatic persistence of data, out system is cloud agnostic so be rest assured wherever you are.",
+      "You can always retry failed uploads, We also help in automatic retries, automatic persistence of data, our system is cloud agnostic and database agnostic, so be rest assured wherever you are.",
     skeleton: <SkeletonFour />,
     className: "col-span-1 lg:col-span-3 border-b lg:border-none",
   },
