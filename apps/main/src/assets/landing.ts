@@ -1,3 +1,20 @@
+import { WIDGET_URL } from "./constants";
+
+const sampleFile = {
+  id: "68bb21db4b5b4d9be15b864a",
+  height: 360,
+  width: 640,
+};
+const isPortrait = sampleFile.height > sampleFile.width;
+const embedUrl = `${WIDGET_URL}/embed/${sampleFile.id}`;
+const embedCode = `<iframe 
+  src="${embedUrl}" 
+  width="${isPortrait ? "360" : "640"}"
+  height="${isPortrait ? "640" : "360"}"
+  frameborder="0"
+  allowfullscreen>
+</iframe>
+`;
 export default {
   words: [
     {
@@ -32,4 +49,6 @@ export default {
         "bg-white text-black border border-black hover:bg-purple-500 hover:text-white",
     },
   ],
+  embedCode,
+  embedUrl,
 };

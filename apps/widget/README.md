@@ -1,4 +1,4 @@
-# Video Embed Widget
+# Video Hub Embed Widget
 
 A lightweight embeddable video player widget built with **Vite**, **TypeScript**, and **Video.js**.
 

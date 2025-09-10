@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import hero_asset from "@/assets/hero";
+import hero_asset from "@/assets/landing";
 import appSettings from "@/assets/settings";
 import type { HeroStateType } from "@shared/types/hero";
 import type { Theme, ThemeStateType } from "@shared/types/themes";
