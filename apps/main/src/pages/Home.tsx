@@ -45,7 +45,7 @@ const screenshots = [
   {
     title: "Embed Anywhere",
     description:
-      "Stream videos easily using our lightweight iframe widget. We give you the code for your public videos and then you just copy and paste it anywhere",
+      "Stream videos easily using our lightweight iframe widget. We give you the code for your public videos and then you just copy and paste it anywhere in a website.",
     skeleton: (
       <FlipCodeSkeleton
         embedCode={landing.embedCode}
@@ -122,7 +122,7 @@ const Home = () => {
             Beautiful Dashboard And Video Library
           </h2>
           <p className="text-neutral-600 dark:text-neutral-300 mb-10">
-            Manage uploads, edit metadata, and explore your video library with
+            Manage uploads, edit metadata, and explore the Video Library with
             ease.
           </p>
           <div className="relative ">
