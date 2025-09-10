@@ -167,10 +167,12 @@ export default function VideoCard({
 
   const statusInfo = getStatusInfo();
 
+  const isPortrait = file.height! > file.width!;
+
   const embedCode = `<iframe 
   src="${WIDGET_URL}/embed/${file.id}" 
-  width="640"
-  height="360"
+  width="${isPortrait ? "360" : "640"}"
+  height="${isPortrait ? "640" : "360"}"
   frameborder="0"
   allowfullscreen>
 </iframe>

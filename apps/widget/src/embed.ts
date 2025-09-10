@@ -1,7 +1,8 @@
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import { fetchVideo } from "./api";
-
+import { inject } from "@vercel/analytics";
+inject()
 async function initEmbed() {
   const id = window.location.pathname.split("/").pop();
   const videoElement = document.getElementById(
