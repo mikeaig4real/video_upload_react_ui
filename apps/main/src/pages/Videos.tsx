@@ -1,6 +1,5 @@
 import CustomHeader from "@/components/ui/custom-header";
 import VideoCards from "@/components/ui/video-cards";
-import { useStore } from "@/store/useStore";
 import { notify } from "@/utils/notify";
 import * as API from "@/api";
 import { filterVideosByStatus } from "@/utils/uploaded_videos";
@@ -9,9 +8,10 @@ import { Link } from "react-router";
 import type { UploadedVideo } from "@shared/types/uploaded_video";
 import { resolveUploadedVideos } from "@/utils/video_file";
 import { log } from "@/utils/logger";
+import { useVideoStore } from "@/store/useVideoStore";
 
 const Videos = () => {
-  const { uploadedFiles, videoFilters, setUploadedFiles, isLoadingVideos, setIsLoadingVideos } = useStore();
+  const { uploadedFiles, videoFilters, setUploadedFiles, isLoadingVideos, setIsLoadingVideos } = useVideoStore();
   const allowedVideos = filterVideosByStatus(uploadedFiles, [
     "completed",
     "processing",

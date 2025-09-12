@@ -35,6 +35,8 @@ import { formatDuration, getVideoPixel } from "@/utils/video_file";
 import VideoForm, { type VideoFormProps } from "@/components/ui/video-form";
 import CodeBlockDemo from "@/components/CodeBlockDemo";
 import { WIDGET_URL } from "@/assets/constants";
+import { useVideoStore } from "@/store/useVideoStore";
+import { usePlayerStore } from "@/store/usePlayerStore";
 
 export interface VideoCardProps {
   file: UploadedVideo;
@@ -79,9 +81,10 @@ export default function VideoCard({
     uploadedFiles,
     setUploadedFiles,
     setUploadedVideoTitle,
-    setIsDialogOpen,
-    setActiveVideoFile,
-  } = useStore();
+    setActiveVideo,
+  } = useVideoStore();
+  const { setIsDialogOpen } = useStore();
+  const { playVideo } = usePlayerStore();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(file.title);
   const [fileName, setFileName] = useState(file.title);
@@ -154,7 +157,8 @@ export default function VideoCard({
     //   return;
     // }
 
-    setActiveVideoFile(file);
+    setActiveVideo(file);
+    playVideo(file);
     setIsDialogOpen(true);
   };
 

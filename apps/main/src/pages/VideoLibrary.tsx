@@ -10,6 +10,8 @@ import type Player from "video.js/dist/types/player";
 import VideoPlayer from "@/components/VideoPlayer";
 import type { UploadedVideo } from "@shared/types/uploaded_video";
 import { notify } from "@/utils/notify";
+import { useVideoStore } from "@/store/useVideoStore";
+import { usePlayerStore } from "@/store/usePlayerStore";
 
 const withFile = <P extends object>(
   PlayerComponent: React.ComponentType<P>,
@@ -18,7 +20,9 @@ const withFile = <P extends object>(
   return (file: UploadedVideo, isMobile: boolean) => {
     const isPortrait = file.height! > file.width!;
     const mobileClassName = isPortrait ? `` : `h-full translate-y-[40%]`;
-    const className = isPortrait ? `absolute w-[50%] translate-x-[40%]` : `w-full translate-y-[40%]`;
+    const className = isPortrait
+      ? `absolute w-[50%] translate-x-[40%]`
+      : `w-full translate-y-[40%]`;
     return (
       <div className={isMobile ? mobileClassName : className}>
         <PlayerComponent {...props} />
@@ -29,22 +33,23 @@ const withFile = <P extends object>(
 
 const VideoLibrary = () => {
   const [showPlayer, setShowPlayer] = useState(false);
+  const { setActiveVideo, videoFilters } = useVideoStore();
   const {
     user,
     logOut,
-    playerState,
-    setPlayerState,
-    playerOptions,
-    setActiveVideo,
-    setActiveVideoFile,
-    setActiveSources,
     isLoadingLibrary,
     setIsLoadingLibrary,
-    setPlayerOptions,
-    videoFilters,
     setLibraryList,
     libraryList,
   } = useStore();
+  const {
+    playerState,
+    setPlayerState,
+    playerOptions,
+    setActiveSources,
+    setPlayerOptions,
+    playVideo,
+  } = usePlayerStore();
   const handlePlayerReady = (player: Player) => {
     log("Player is ready:", player);
     setPlayerState({ ...playerState, player, status: "ready" });
@@ -89,7 +94,8 @@ const VideoLibrary = () => {
 
   const onPlay = (file: UploadedVideo) => {
     setShowPlayer(true);
-    setActiveVideoFile(file);
+    setActiveVideo(file);
+    playVideo(file);
   };
   const onClose = () => {
     setShowPlayer(false);

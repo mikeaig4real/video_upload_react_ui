@@ -13,19 +13,25 @@ import { useStore } from "@/store/useStore";
 import { Outlet, useLocation } from "react-router";
 import { useEffect } from "react";
 import { log } from "@/utils/logger";
+import { useVideoStore } from "@/store/useVideoStore";
+import { usePlayerStore } from "@/store/usePlayerStore";
 
 const Dashboard = () => {
   const {
+    activeVideo,
+  } = useVideoStore();
+  const {
     isDialogOpen,
     setIsDialogOpen,
-    activeVideo,
-    playerOptions,
-    playerState,
-    setPlayerState,
     navMain,
     setNavMainActive,
     setSiteHeaderText,
   } = useStore();
+  const {
+    playerOptions,
+    playerState,
+    setPlayerState,
+  } = usePlayerStore();
   const { pathname } = useLocation();
   useEffect( () =>
   {

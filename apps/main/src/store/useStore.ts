@@ -67,7 +67,6 @@ interface Actions {
   setSiteHeaderText: (description: NavType[number]["description"]) => void;
   setUploadedFiles: (files: UploadedVideo[]) => void;
   setIsDialogOpen: (isOpen: boolean) => void;
-  setActiveVideo: (video: OptionalUploadedVideo | null) => void;
   setActiveSources: (sources: VideoSource[]) => void;
   setPlayerOptions: (options: VideoPlayerOptions) => void;
   setPlayerState: (playerState: VideoPlayerState) => void;
@@ -86,7 +85,7 @@ interface Actions {
   setIsLoadingVideos: (loading: boolean) => void;
   setIsLoadingLibrary: (loading: boolean) => void;
   setIsUploadingFiles: (uploading: boolean) => void;
-  setActiveVideoFile: (file: UploadedVideo) => void;
+  setActiveVideo: (file: UploadedVideo | null) => void;
   setLibraryList: (files: UploadedVideo[]) => void;
 }
 
@@ -94,7 +93,6 @@ interface Actions {
 export const useStore = create<State & Actions>()(
   persist(
     immer((set, get) => ({
-
       // theme
       setTheme: (theme: Theme) =>
         set((state) => {
@@ -103,8 +101,8 @@ export const useStore = create<State & Actions>()(
       setCurrTheme: (currTheme: Theme) =>
         set((state) => {
           state.currTheme = currTheme;
-        } ),
-      
+        }),
+
       // form
       setFormType(type) {
         set((state) => {
@@ -168,11 +166,6 @@ export const useStore = create<State & Actions>()(
           state.activeSources = sources;
         });
       },
-      setActiveVideo(video) {
-        set((state) => {
-          state.activeVideo = video;
-        });
-      },
 
       // player
       setPlayerOptions(options) {
@@ -181,12 +174,13 @@ export const useStore = create<State & Actions>()(
         });
       },
 
-      // settings
+      // player
       setPlayerState(playerState) {
         set((state) => {
           state.playerState = playerState as VideoPlayerState;
         });
       },
+      // settings
       setAppSettings(settings) {
         set((state) => {
           state.appSettings = settings;
@@ -259,8 +253,13 @@ export const useStore = create<State & Actions>()(
           state.videoFilters = filters;
         });
       },
-      setActiveVideoFile: (file: UploadedVideo) => {
-        set((state) => {
+      setActiveVideo: (file) => {
+        set( ( state ) =>
+        {
+          if (!file) {
+            state.activeVideo = file;
+            return;
+          }
           const videoObject: OptionalUploadedVideo = {
             id: file.id,
             name: file.name,
@@ -271,13 +270,13 @@ export const useStore = create<State & Actions>()(
             upload_url: file.upload_url,
             playback_url: file.playback_url,
           };
+          state.activeVideo = videoObject;
           const sources = [
             {
               src: videoObject.upload_url!,
               type: videoObject.type!,
             },
           ];
-          state.activeVideo = videoObject;
           state.activeSources = sources;
           state.playerOptions = {
             ...state.playerOptions,
@@ -301,7 +300,7 @@ export const useStore = create<State & Actions>()(
       navMainActive: 1,
       navSecondary,
       navUserDropDown,
-      siteHeaderText: navMain[ 0 ].description,
+      siteHeaderText: navMain[0].description,
       // videos
       uploadedFiles: [],
       isDialogOpen: false,
@@ -355,7 +354,7 @@ export const useStore = create<State & Actions>()(
     })),
     {
       name: PERSIST_KEY,
-      partialize: ( state ) => ( {
+      partialize: (state) => ({
         // auth
         token: state.token,
         user: state.user,

@@ -1,15 +1,15 @@
 import { FileUpload } from "@/components/ui/file-upload";
 import CustomButton from "@/components/CustomButton";
-import { useStore } from "@/store/useStore";
 import { log } from "@/utils/logger";
 import { notify } from "@/utils/notify";
 import * as API from "@/api";
 import { useNavigate } from "react-router";
 import { filterVideosByStatus } from "@/utils/uploaded_videos";
 import { MAX_UPLOAD_COUNT } from "@shared/assets/constants";
+import { useVideoStore } from "@/store/useVideoStore";
 
 export function VideoUpload() {
-  const { uploadedFiles } = useStore();
+  const { uploadedFiles } = useVideoStore();
   const navigate = useNavigate();
   const allowedVideos = filterVideosByStatus(uploadedFiles, ["error", "idle"]);
   const inProgressVideos = filterVideosByStatus(uploadedFiles, [

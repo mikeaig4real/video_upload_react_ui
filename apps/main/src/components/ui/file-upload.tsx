@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { motion } from "motion/react";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
-import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { formatGroupedErrors } from "@/utils/file_upload_errors";
 import VideoCard from "@/components/ui/video-card";
@@ -17,6 +16,7 @@ import { log } from "@/utils/logger";
 import { filterVideosByStatus } from "@/utils/uploaded_videos";
 import { resolveUploadedVideos } from "@/utils/video_file";
 import { MAX_UPLOAD_COUNT, VIDEO_SPECS } from "@shared/assets/constants";
+import { useVideoStore } from "@/store/useVideoStore";
 
 const mainVariant = {
   initial: {
@@ -41,7 +41,7 @@ const secondaryVariant = {
 
 const toastId = "FileUpload";
 export const FileUpload = () => {
-  const { uploadedFiles, setUploadedFiles } = useStore();
+  const { uploadedFiles, setUploadedFiles } = useVideoStore();
   const allowedVideos = filterVideosByStatus(uploadedFiles, ["error", "idle"]);
   const inProgressVideos = filterVideosByStatus(uploadedFiles, [
     "processing",

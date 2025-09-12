@@ -9,7 +9,7 @@ import type { APIResponse } from "@shared/types/response";
 import { log } from "@/utils/logger";
 import axios from "axios";
 import { toast } from "sonner";
-import { useStore } from "@/store/useStore";
+import { useVideoStore } from "@/store/useVideoStore";
 import { createVideo } from "./video";
 import { withRetry } from "@/utils/retry";
 import { makeFinalUploadMessage } from "@/utils/file_upload_errors";
@@ -30,7 +30,7 @@ export async function getParams({ file }: { file: UploadedVideo }) {
       width: file.width,
       height: file.height,
     };
-    useStore.getState().setVideoStatus(file, "processing");
+    useVideoStore.getState().setVideoStatus(file, "processing");
     const res = await api.post<APIResponse<GetUploadParamsResponse>>(
       "/uploader/params",
       uploadedInputBody
@@ -40,7 +40,7 @@ export async function getParams({ file }: { file: UploadedVideo }) {
     log({
       error,
     });
-    useStore.getState().setVideoStatus(file, "error");
+    useVideoStore.getState().setVideoStatus(file, "error");
     throw new Error("Failed to get upload parameters"); // throws to uploadFileToCloudBucket
   }
 }
@@ -65,11 +65,11 @@ export async function uploadToCloudBucket({
       onUploadProgress: (event: ProgressEvent) => {
         if (event.total) {
           const progress = Math.round((event.loaded * 100) / event.total);
-          useStore.getState().setVideoProgress(file, progress);
+          useVideoStore.getState().setVideoProgress(file, progress);
         }
       },
     };
-    useStore.getState().setVideoStatus(file, "uploading");
+    useVideoStore.getState().setVideoStatus(file, "uploading");
     const res = await axios.post<UploadResponse>(
       uploadOutputParams.upload_url,
       formData,
@@ -86,7 +86,7 @@ export async function uploadToCloudBucket({
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } = e as any;
-    useStore.getState().setVideoStatus(file, "error");
+    useVideoStore.getState().setVideoStatus(file, "error");
     toast.error(`An error: ${error.message} occurred, retry at uploads`);
     throw new Error(error.message); // throws to uploadFileToCloudBucket
   }
@@ -110,7 +110,7 @@ export async function uploadFileToCloudBucket(file: UploadedVideo) {
 export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
   const promises = files.map(async (file) => {
     const upload_details = await uploadFileToCloudBucket(file); // throws to Promise.all/ rejected in Promise.allSettled
-    useStore.getState().finalizeUpload(file, upload_details);
+    useVideoStore.getState().finalizeUpload(file, upload_details);
     try {
       // throw new Error("Failed to upload video"); // testing
       await withRetry(
@@ -120,9 +120,9 @@ export async function uploadMultipleFilesToCloudBucket(files: UploadedVideo[]) {
         undefined,
         5000
       );
-      useStore.getState().setVideoStatus(file, "completed");
+      useVideoStore.getState().setVideoStatus(file, "completed");
     } catch (error) {
-      useStore.getState().setVideoStatus(file, "processing");
+      useVideoStore.getState().setVideoStatus(file, "processing");
       log({
         error,
       });
