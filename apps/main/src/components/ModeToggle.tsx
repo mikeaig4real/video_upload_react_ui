@@ -6,13 +6,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useStore } from "@/store/useStore";
 import { useEffect } from "react";
+import { useThemeStore } from "@/store/useThemeStore";
 
 export function ModeToggle() {
   const {
     setTheme, theme, setCurrTheme
-  } = useStore();
+  } = useThemeStore();
   useEffect(() => {
     const root = window.document.documentElement;
 

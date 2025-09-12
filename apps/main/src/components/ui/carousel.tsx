@@ -1,10 +1,10 @@
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { useState, useRef, useId } from "react";
 import PixelatedCanvas from "./pixelated-canvas";
-import { useStore } from "@/store/useStore";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Play } from "lucide-react";
 import type { UploadedVideo } from "@shared/types/uploaded_video";
+import { useThemeStore } from "@/store/useThemeStore";
 
 export interface SlideProps {
   slide: UploadedVideo;
@@ -27,7 +27,7 @@ const Slide = ({
   triggered,
 }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
-  const { currTheme } = useStore();
+  const { currTheme } = useThemeStore();
   const isMobile = useIsMobile();
   const imageLoaded = (event: React.SyntheticEvent<HTMLImageElement>) => {
     event.currentTarget.style.opacity = "1";
