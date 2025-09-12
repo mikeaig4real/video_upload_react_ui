@@ -90,10 +90,12 @@ interface Actions {
   setLibraryList: (files: UploadedVideo[]) => void;
 }
 
-// TODO: Refactor to modularise store and remove redundant actions
+// TODO: Refactor to modularize store and remove redundant actions
 export const useStore = create<State & Actions>()(
   persist(
     immer((set, get) => ({
+
+      // theme
       setTheme: (theme: Theme) =>
         set((state) => {
           state.theme = theme;
@@ -101,12 +103,16 @@ export const useStore = create<State & Actions>()(
       setCurrTheme: (currTheme: Theme) =>
         set((state) => {
           state.currTheme = currTheme;
-        }),
+        } ),
+      
+      // form
       setFormType(type) {
         set((state) => {
           state.formType = type;
         });
       },
+
+      // auth
       setToken(token) {
         set((state) => {
           state.token = token;
@@ -133,6 +139,8 @@ export const useStore = create<State & Actions>()(
           state.token = null;
         });
       },
+
+      // nav
       setNavMainActive(id) {
         set((state) => {
           state.navMainActive = id;
@@ -143,6 +151,8 @@ export const useStore = create<State & Actions>()(
           state.siteHeaderText = description;
         });
       },
+
+      // videos
       setUploadedFiles(files) {
         set((state) => {
           state.uploadedFiles = files;
@@ -163,11 +173,15 @@ export const useStore = create<State & Actions>()(
           state.activeVideo = video;
         });
       },
+
+      // player
       setPlayerOptions(options) {
         set((state) => {
           state.playerOptions = options;
         });
       },
+
+      // settings
       setPlayerState(playerState) {
         set((state) => {
           state.playerState = playerState as VideoPlayerState;
@@ -178,6 +192,8 @@ export const useStore = create<State & Actions>()(
           state.appSettings = settings;
         });
       },
+
+      // videos
       setVideoStatus: (file, status) => {
         set((state) => {
           const newArr = state.uploadedFiles.map((v) => {
@@ -270,21 +286,28 @@ export const useStore = create<State & Actions>()(
           };
         });
       },
+      // component
       hero: hero_asset,
+      // theme
       theme: get()?.theme || DEFAULT_THEME,
       currTheme: get()?.currTheme || DEFAULT_THEME,
+      // form
       formType: DEFAULT_FORM_TYPE,
+      // auth
       token: get()?.token,
       user: get()?.user,
+      // nav
       navMain,
       navMainActive: 1,
       navSecondary,
       navUserDropDown,
-      siteHeaderText: navMain[0].description,
+      siteHeaderText: navMain[ 0 ].description,
+      // videos
       uploadedFiles: [],
       isDialogOpen: false,
       activeSources: [],
       activeVideo: null,
+      // player
       playerOptions: {
         autoplay: false,
         controls: true,
@@ -296,27 +319,34 @@ export const useStore = create<State & Actions>()(
         status: null,
         player: null,
       },
+      // settings
       appSettings,
+      // videos
       videoFilters: VIDEO_FILTER_DEFAULTS,
       isLoadingVideos: false,
+      // library
       libraryList: [],
+      // videos
       setIsLoadingVideos: (loading) => {
         set((state) => {
           state.isLoadingVideos = loading;
         });
       },
+      // library
       isLoadingLibrary: false,
       setIsLoadingLibrary: (loading) => {
         set((state) => {
           state.isLoadingLibrary = loading;
         });
       },
+      // videos
       isUploadingFiles: false,
       setIsUploadingFiles: (uploading) => {
         set((state) => {
           state.isUploadingFiles = uploading;
         });
       },
+      // library
       setLibraryList: (files) => {
         set((state) => {
           state.libraryList = files;
@@ -325,10 +355,13 @@ export const useStore = create<State & Actions>()(
     })),
     {
       name: PERSIST_KEY,
-      partialize: (state) => ({
+      partialize: ( state ) => ( {
+        // auth
         token: state.token,
         user: state.user,
+        // theme
         theme: state.theme,
+        // settings
         appSettings: state.appSettings,
       }),
     }
