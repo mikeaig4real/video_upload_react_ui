@@ -12,6 +12,7 @@ import type { UploadedVideo } from "@shared/types/uploaded_video";
 import { notify } from "@/utils/notify";
 import { useVideoStore } from "@/store/useVideoStore";
 import { usePlayerStore } from "@/store/usePlayerStore";
+import { useLibraryStore } from "@/store/useLibraryStore";
 
 const withFile = <P extends object>(
   PlayerComponent: React.ComponentType<P>,
@@ -37,11 +38,13 @@ const VideoLibrary = () => {
   const {
     user,
     logOut,
+  } = useStore();
+  const {
     isLoadingLibrary,
     setIsLoadingLibrary,
     setLibraryList,
     libraryList,
-  } = useStore();
+  } = useLibraryStore();
   const {
     playerState,
     setPlayerState,

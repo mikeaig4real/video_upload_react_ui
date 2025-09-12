@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { log } from "@/utils/logger";
 import { useVideoStore } from "@/store/useVideoStore";
 import { usePlayerStore } from "@/store/usePlayerStore";
+import { useNavStore } from "@/store/useNavStore";
 
 const Dashboard = () => {
   const {
@@ -23,10 +24,12 @@ const Dashboard = () => {
   const {
     isDialogOpen,
     setIsDialogOpen,
-    navMain,
-    setNavMainActive,
     setSiteHeaderText,
   } = useStore();
+  const {
+    navMain,
+    setNavMainActive,
+  } = useNavStore();
   const {
     playerOptions,
     playerState,

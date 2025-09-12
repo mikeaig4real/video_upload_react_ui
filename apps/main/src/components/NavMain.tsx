@@ -5,11 +5,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useStore } from "@/store/useStore";
+import { useNavStore } from "@/store/useNavStore";
 import { useNavigate } from "react-router";
 
 export function NavMain() {
-  const { navMain, navMainActive } = useStore();
+  const { navMain, navMainActive } = useNavStore();
   const navigate = useNavigate();
   return (
     <SidebarGroup>
