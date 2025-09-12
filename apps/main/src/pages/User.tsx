@@ -13,12 +13,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Edit3, Check, X } from "lucide-react";
-import { useStore } from "@/store/useStore";
 import type { User } from "@shared/types/user";
+import { useAuthStore } from "@/store/useAuthStore";
 
 // todo: Use CustomForm component
 export default function User() {
-  const { user, setUser } = useStore();
+  const { user, setUser } = useAuthStore();
   const [profile, setProfile] = useState<User>(user!);
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [tempUsername, setTempUsername] = useState(profile.username);

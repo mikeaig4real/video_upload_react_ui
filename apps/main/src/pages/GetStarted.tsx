@@ -12,9 +12,11 @@ import type {
   ResponseSchemaType,
 } from "@shared/types/getting_started";
 import { notify } from "@/utils/notify";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const GetStarted = () => {
-  const { formType, setFormType, setUser, setToken } = useStore();
+  const { formType, setFormType } = useStore();
+  const {  setUser, setToken } = useAuthStore();
   const navigator = useNavigate();
   const onSuccess = (type: FormType) => {
     return ({ user, access_token }: ResponseSchemaType) => {

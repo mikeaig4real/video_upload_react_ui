@@ -1,5 +1,5 @@
 import { API_BASE_URL, REDIRECT_URL } from "@/assets/constants";
-import { useStore } from "@/store/useStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import axios from "axios";
 import { toast } from "sonner";
 import { warn, log } from "@/utils/logger";
@@ -10,7 +10,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = useStore.getState().token;
+  const token = useAuthStore.getState().token;
   if (token && config?.headers) {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
@@ -34,7 +34,7 @@ api.interceptors.response.use(
     if (error?.response?.status === 401 || error?.response?.status === 403) {
       // todo: implement refresh token
       warn("Unauthorized - redirecting and clearing session");
-      useStore.getState().logOut();
+      useAuthStore.getState().logOut();
       window.location.href = REDIRECT_URL;
     }
     return Promise.reject(error);

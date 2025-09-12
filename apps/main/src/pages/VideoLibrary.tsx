@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Carousel from "@/components/ui/carousel";
-import { useStore } from "@/store/useStore";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { IconHome, IconLayoutDashboard, IconLogout } from "@tabler/icons-react";
 import CustomHeader from "@/components/ui/custom-header";
@@ -13,6 +12,7 @@ import { notify } from "@/utils/notify";
 import { useVideoStore } from "@/store/useVideoStore";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { useLibraryStore } from "@/store/useLibraryStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const withFile = <P extends object>(
   PlayerComponent: React.ComponentType<P>,
@@ -38,7 +38,7 @@ const VideoLibrary = () => {
   const {
     user,
     logOut,
-  } = useStore();
+  } = useAuthStore();
   const {
     isLoadingLibrary,
     setIsLoadingLibrary,
