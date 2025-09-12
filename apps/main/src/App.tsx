@@ -5,9 +5,9 @@ import { BackgroundLines } from "@/components/ui/background-lines";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
-import { useStore } from "@/store/useStore";
+import { useThemeStore } from "./store/useThemeStore";
 function App() {
-  const { theme } = useStore();
+  const { theme } = useThemeStore();
   return (
     <BackgroundLines>
       <main className="h-dvh safe-top w-screen absolute z-50 left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] overflow-hidden overflow-y-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-black scrollbar-track-gray-200">

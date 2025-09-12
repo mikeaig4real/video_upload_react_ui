@@ -1,7 +1,6 @@
 import { LogInForm } from "@/components/LogInForm";
 import { RegisterForm } from "@/components/RegisterForm";
 import { CardWrapper } from "@/components/CardWrapper";
-import { useStore } from "@/store/useStore";
 import * as API from "@/api";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
@@ -13,9 +12,10 @@ import type {
 } from "@shared/types/getting_started";
 import { notify } from "@/utils/notify";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useFormStore } from "@/store/useFormStore";
 
 const GetStarted = () => {
-  const { formType, setFormType } = useStore();
+  const { formType, setFormType } = useFormStore();
   const {  setUser, setToken } = useAuthStore();
   const navigator = useNavigate();
   const onSuccess = (type: FormType) => {

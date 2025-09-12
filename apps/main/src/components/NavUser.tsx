@@ -18,13 +18,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useStore } from "@/store/useStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useNavStore } from "@/store/useNavStore";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user, logOut } = useAuthStore();
-  const { navUserDropDown } = useStore();
+  const { navUserDropDown } = useNavStore();
   return (
     <SidebarMenu>
       <SidebarMenuItem>

@@ -10,10 +10,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { SettingItem } from "@shared/types/settings";
-import { useStore } from "@/store/useStore";
+import { useSettingsStore } from "@/store/useSettingsStore";
 
 export default function Settings() {
-  const { appSettings, setAppSettings } = useStore();
+  const { appSettings, setAppSettings } = useSettingsStore();
   const [currentSettings, setCurrentSettings] =
     useState<SettingItem[]>(appSettings);
   const [hasChanges, setHasChanges] = useState(false);

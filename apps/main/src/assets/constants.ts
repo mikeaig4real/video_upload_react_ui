@@ -4,9 +4,10 @@ const {
   VITE_DEFAULT_THEME = "system",
   VITE_THEME_KEY = "vite-ui-theme",
   VITE_DEFAULT_FORM_TYPE = "register",
+  VITE_REDIRECT_URL = "/get-started",
+  VITE_SETTINGS_KEY,
   VITE_API_TOKEN_NAME,
   VITE_PERSIST_KEY,
-  VITE_REDIRECT_URL = "/get-started",
   VITE_AUTH_KEY,
   VITE_API_BASE_URL,
   VITE_ENV,
@@ -20,6 +21,7 @@ export const THEME_KEY = VITE_THEME_KEY;
 export const DEFAULT_FORM_TYPE = VITE_DEFAULT_FORM_TYPE;
 export const API_TOKEN_NAME = VITE_API_TOKEN_NAME;
 export const PERSIST_KEY = VITE_PERSIST_KEY;
+export const SETTINGS_KEY = VITE_SETTINGS_KEY;
 export const AUTH_KEY = VITE_AUTH_KEY;
 export const REDIRECT_URL = VITE_REDIRECT_URL;
 export const API_BASE_URL = VITE_API_BASE_URL;

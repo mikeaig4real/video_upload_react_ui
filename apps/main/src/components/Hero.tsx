@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router";
 import { useStore } from "@/store/useStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const Hero = () => {
   const navigate = useNavigate();
-  const { hero, user } = useStore();
+  const { hero } = useStore();
+  const { user } = useAuthStore();
   const modValues = ({ to, text }: { to: string; text: string }) => {
     const modTo = user && to === "/get-started" ? "/dashboard/upload" : to;
     const modText = user && text === "Get Started" ? "Dashboard" : text;

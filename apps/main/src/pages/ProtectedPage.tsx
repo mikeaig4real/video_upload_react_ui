@@ -1,11 +1,11 @@
-import { useStore } from "@/store/useStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Navigate, Outlet } from "react-router";
 
 const ProtectedPage = () => {
   const {
     user,
     token,
-  } = useStore();
+  } = useAuthStore();
   if (!user || !token) return <Navigate to="/get-started" replace />;
   return <Outlet />;
 };
