@@ -90,6 +90,7 @@ interface Actions {
   setLibraryList: (files: UploadedVideo[]) => void;
 }
 
+// TODO: Refactor to modularise store and remove redundant actions
 export const useStore = create<State & Actions>()(
   persist(
     immer((set, get) => ({
