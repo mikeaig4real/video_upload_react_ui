@@ -1,7 +1,7 @@
 import { WIDGET_URL } from "./constants";
 
 const sampleFile = {
-  id: "68bb21db4b5b4d9be15b864a",
+  id: "68c45036574d7c3a9c86cacf",
   height: 360,
   width: 640,
 };
