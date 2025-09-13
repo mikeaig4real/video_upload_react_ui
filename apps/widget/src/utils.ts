@@ -6,4 +6,8 @@ export const logger = {
     if (IS_PROD) return;
     return console.log(...args);
   },
+  error: (...args: any[]) => {
+    if (IS_PROD) return;
+    return console.error(...args);
+  },
 };

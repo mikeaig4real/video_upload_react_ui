@@ -93,6 +93,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import logger from "@/utils/logger";
 export type BundledLanguage = string;
 const filenameIconMap = {
   ".env": SiDotenv,
@@ -546,7 +547,7 @@ export const CodeBlockContent = ({
         setHighlightedCode(html);
         setIsLoading(false);
       } catch (error) {
-        console.error(
+        logger.error(
           `Failed to highlight code for language "${language}":`,
           error
         );

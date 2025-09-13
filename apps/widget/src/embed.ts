@@ -2,6 +2,7 @@ import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import { fetchVideo } from "./api";
 import { inject } from "@vercel/analytics";
+import { logger } from "./utils";
 inject()
 async function initEmbed() {
   const id = window.location.pathname.split("/").pop();
@@ -45,7 +46,7 @@ async function initEmbed() {
       player.src(fallbackSources);
     }
   } catch (err) {
-    console.error("Error loading video:", err);
+    logger.error("Error loading video:", err);
   }
 }
 

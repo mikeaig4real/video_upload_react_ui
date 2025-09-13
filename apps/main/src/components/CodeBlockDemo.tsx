@@ -14,6 +14,7 @@ import {
   CodeBlockSelectTrigger,
   CodeBlockSelectValue,
 } from "@/components/ui/code-block";
+import logger from "@/utils/logger";
 
 export interface CodeFile {
   language: BundledLanguage | string;
@@ -66,8 +67,8 @@ const CodeBlockDemo: React.FC<CodeBlockDemoProps> = ({
         </CodeBlockSelect>
 
         <CodeBlockCopyButton
-          onCopy={onCopy ?? (() => console.log("Copied code to clipboard"))}
-          onError={onError ?? (() => console.error("Failed to copy code"))}
+          onCopy={onCopy ?? (() => logger.log("Copied code to clipboard"))}
+          onError={onError ?? (() => logger.error("Failed to copy code"))}
         />
       </CodeBlockHeader>
 

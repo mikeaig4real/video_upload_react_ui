@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
+import logger from "@/utils/logger";
 
 type PixelatedCanvasProps = {
   src: string;
@@ -477,7 +478,7 @@ const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
     };
 
     img.onerror = () => {
-      console.error("Failed to load image for PixelatedCanvas:", src);
+      logger.error("Failed to load image for PixelatedCanvas:", src);
     };
 
     if (responsive) {
