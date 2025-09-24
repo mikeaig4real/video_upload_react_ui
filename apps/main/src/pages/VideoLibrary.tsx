@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Carousel from "@/components/ui/carousel";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { IconHome, IconLayoutDashboard, IconLogout } from "@tabler/icons-react";
 import CustomHeader from "@/components/ui/custom-header";
-import * as API from "@/api";
 import { log } from "@/utils/logger";
 import type Player from "video.js/dist/types/player";
 import VideoPlayer from "@/components/VideoPlayer";
 import type { UploadedVideo } from "@shared/types/uploaded_video";
-import { notify } from "@/utils/notify";
 import { useVideoStore } from "@/store/useVideoStore";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import { useLibraryStore } from "@/store/useLibraryStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useLibraryList } from "@/hooks/query/useLibrary";
+import { LoaderThree } from "@/components/ui/loader";
+import { normalizeError } from "@/utils/error";
 
 const withFile = <P extends object>(
   PlayerComponent: React.ComponentType<P>,
@@ -35,16 +35,7 @@ const withFile = <P extends object>(
 const VideoLibrary = () => {
   const [showPlayer, setShowPlayer] = useState(false);
   const { setActiveVideo, videoFilters } = useVideoStore();
-  const {
-    user,
-    logOut,
-  } = useAuthStore();
-  const {
-    isLoadingLibrary,
-    setIsLoadingLibrary,
-    setLibraryList,
-    libraryList,
-  } = useLibraryStore();
+  const { user, logOut } = useAuthStore();
   const {
     playerState,
     setPlayerState,
@@ -110,29 +101,23 @@ const VideoLibrary = () => {
       sources: [],
     });
   };
-  useEffect(() => {
-    if (isLoadingLibrary) return;
-    setIsLoadingLibrary(true);
-    notify(API.LibraryAPI.getLibraryList(videoFilters), {
-      success: ({ data }: { data: UploadedVideo[] }) => {
-        log(data);
-        setLibraryList(data);
-        return data.length ? "Done" : "No videos...";
-      },
-      loading: "Loading..",
-      error: "Could not load",
-      finally: () => {
-        setIsLoadingLibrary(false);
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+  const {
+    data: { data: videoLibraryList } = { data: [] },
+    isLoading,
+    error,
+  } = useLibraryList(videoFilters);
+
   return (
     <>
       <div className="relative overflow-hidden w-full h-full py-20">
-        {libraryList.length > 0 ? (
+        {isLoading ? (
+          <CustomHeader header={<LoaderThree />} />
+        ) : error ? (
+          <CustomHeader header={normalizeError(error)} />
+        ) : videoLibraryList!.length > 0 ? (
           <Carousel
-            slides={libraryList}
+            slides={videoLibraryList!}
             toTrigger={withFile(VideoPlayer, {
               options: playerOptions,
               onReady: handlePlayerReady,

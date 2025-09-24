@@ -104,17 +104,24 @@ export const LoaderThree = () => {
       strokeWidth="1"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-20 w-20 stroke-neutral-500 [--fill-final:var(--color-yellow-300)] [--fill-initial:var(--color-neutral-50)] dark:stroke-neutral-100 dark:[--fill-final:var(--color-yellow-500)] dark:[--fill-initial:var(--color-neutral-800)]"
+      className="h-20 w-20 stroke-purple-500 dark:stroke-purple-400"
     >
       <motion.path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <motion.path
-        initial={{ pathLength: 0, fill: "var(--fill-initial)" }}
-        animate={{ pathLength: 1, fill: "var(--fill-final)" }}
+        initial={{ pathLength: 0, fill: "rgba(168, 85, 247, 0.2)" }} // purple-500 w/ opacity
+        animate={{
+          pathLength: 1,
+          fill: [
+            "rgba(168, 85, 247, 0.2)", // start
+            "rgba(168, 85, 247, 0.6)", // mid
+            "rgba(168, 85, 247, 0.2)", // end
+          ],
+        }}
         transition={{
           duration: 2,
           ease: "easeInOut",
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: "mirror",
         }}
         d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"
       />

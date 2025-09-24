@@ -3,6 +3,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import axios from "axios";
 import { toast } from "sonner";
 import { warn, log } from "@/utils/logger";
+import { normalizeError } from "@/utils/error";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -23,11 +24,7 @@ api.interceptors.response.use(
     log({
       error,
     });
-    const message =
-      error?.response?.data?.description ||
-      error?.response?.data?.message ||
-      error?.message ||
-      "Something went wrong";
+    const message = normalizeError(error);
     toast.error(message, {
       duration: 4000,
     });
