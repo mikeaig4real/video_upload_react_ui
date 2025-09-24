@@ -1,30 +1,21 @@
 import { LogInForm } from "@/components/LogInForm";
 import { RegisterForm } from "@/components/RegisterForm";
 import { CardWrapper } from "@/components/CardWrapper";
-import * as API from "@/api";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
-import type {
-  FormType,
-  LogIn,
-  Register,
-  ResponseSchemaType,
-} from "@shared/types/getting_started";
+import type { FormType, LogIn, Register } from "@shared/types/getting_started";
 import { notify } from "@/utils/notify";
-import { useAuthStore } from "@/store/useAuthStore";
 import { useFormStore } from "@/store/useFormStore";
+import { useLogin, useRegister } from "@/hooks/query/useAuth";
 
 const GetStarted = () => {
   const { formType, setFormType } = useFormStore();
-  const {  setUser, setToken } = useAuthStore();
   const navigator = useNavigate();
+  const loginMutation = useLogin();
+  const registerMutation = useRegister();
   const onSuccess = (type: FormType) => {
-    return ({ user, access_token }: ResponseSchemaType) => {
-      setUser(user);
-      setToken(access_token);
-      setTimeout(() => {
-        navigator("/dashboard");
-      }, 2000);
+    return () => {
+      navigator("/dashboard");
       return `${
         type === "register" ? "Registration" : "Logging in"
       } successful`;
@@ -32,7 +23,7 @@ const GetStarted = () => {
   };
   function handleRegisterSubmit(values: object) {
     const assertValues = values as Register;
-    notify(API.AuthAPI.register(assertValues), {
+    notify(registerMutation.mutateAsync(assertValues), {
       success: onSuccess("register"),
       loading: "Registering...",
       error: "Registration Failed.",
@@ -40,12 +31,17 @@ const GetStarted = () => {
   }
   function handleLogInSubmit(values: object) {
     const assertValues = values as LogIn;
-    notify(API.AuthAPI.login(assertValues), {
+    notify(loginMutation.mutateAsync(assertValues), {
       success: onSuccess("login"),
       loading: "Logging in...",
       error: "Login Failed.",
     });
   }
+  const isPending =
+    formType === "register"
+      ? registerMutation.isPending
+      : loginMutation.isPending;
+
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -57,9 +53,15 @@ const GetStarted = () => {
           className="bg-transparent"
         >
           {formType === "register" ? (
-            <RegisterForm handleSubmit={handleRegisterSubmit} />
+            <RegisterForm
+              handleSubmit={handleRegisterSubmit}
+              submitBtnDisabled={registerMutation.isPending}
+            />
           ) : (
-            <LogInForm handleSubmit={handleLogInSubmit} />
+            <LogInForm
+              handleSubmit={handleLogInSubmit}
+              submitBtnDisabled={loginMutation.isPending}
+            />
           )}
         </CardWrapper>
       </div>
@@ -68,6 +70,7 @@ const GetStarted = () => {
         type="button"
         className="cursor-pointer"
         onClick={() => setFormType(formType === "login" ? "register" : "login")}
+        disabled={isPending}
       >
         {formType === "login"
           ? "Need an account ? Sign Up"

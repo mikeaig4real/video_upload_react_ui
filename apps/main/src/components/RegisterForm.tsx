@@ -2,7 +2,7 @@ import { registerSchema, type Register } from "@shared/types/getting_started";
 import {
   CustomForm,
   type FormFieldsDefault,
-  type HandleSubmitType,
+  type FormProps,
 } from "@/components/CustomForm";
 
 const formFields: ({
@@ -43,11 +43,7 @@ const defaultValues = {
   confirm: "",
 };
 
-export function RegisterForm({
-  handleSubmit,
-}: {
-  handleSubmit: HandleSubmitType;
-}) {
+export function RegisterForm({ handleSubmit, submitBtnDisabled }: FormProps) {
   return (
     <CustomForm
       handleSubmit={handleSubmit}
@@ -59,6 +55,7 @@ export function RegisterForm({
           label: "Submit",
           type: "submit" as const,
           formChangeTriggered: false,
+          disabled: submitBtnDisabled,
         },
       ]}
     />

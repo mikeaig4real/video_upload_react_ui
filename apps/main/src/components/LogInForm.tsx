@@ -2,7 +2,7 @@ import { logInSchema, type LogIn } from "@shared/types/getting_started";
 import {
   CustomForm,
   type FormFieldsDefault,
-  type HandleSubmitType,
+  type FormProps,
 } from "@/components/CustomForm";
 
 const formFields: ({
@@ -28,11 +28,7 @@ const defaultValues = {
   password: "",
 };
 
-export function LogInForm({
-  handleSubmit,
-}: {
-  handleSubmit: HandleSubmitType;
-}) {
+export function LogInForm({ handleSubmit, submitBtnDisabled }: FormProps) {
   return (
     <CustomForm
       handleSubmit={handleSubmit}
@@ -44,6 +40,7 @@ export function LogInForm({
           label: "Submit",
           type: "submit" as const,
           formChangeTriggered: false,
+          disabled: submitBtnDisabled,
         },
       ]}
     />

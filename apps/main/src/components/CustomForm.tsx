@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import CustomButton from "@/components/CustomButton";
+import CustomButton, { type CustomButtonProps } from "@/components/CustomButton";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -23,7 +23,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 export type SchemaType = ZodType<object, FieldValues>;
-export type HandleSubmitType = ( values: z.infer<SchemaType> ) => void;
+export type HandleSubmitType = (values: z.infer<SchemaType>) => void;
+export type FormProps = {
+  handleSubmit: HandleSubmitType;
+  submitBtnDisabled: boolean;
+};
 export type FormFieldsDefault = {
   label: string;
   description: string;
@@ -49,13 +53,10 @@ export function CustomForm({
   formFields: ({
     name: keyof z.infer<SchemaType> | string | never;
   } & FormFieldsDefault)[];
-  buttons: {
+  buttons: ({
     label: string;
-    onClick?: () => void;
-    type: "button" | "submit" | "reset";
-    variant?: "default" | "outline" | "ghost" | "link" | "destructive";
     formChangeTriggered: boolean;
-  }[];
+  } & CustomButtonProps)[];
 }) {
   const form = useForm<z.infer<SchemaType>>({
     resolver: zodResolver(zodSchema),
@@ -170,6 +171,7 @@ export function CustomForm({
                     type={button.type}
                     onClick={button.onClick}
                     variant={button.variant!}
+                    disabled={button.disabled}
                   >
                     {button.label}
                   </CustomButton>
@@ -184,6 +186,7 @@ export function CustomForm({
                   type={button.type}
                   onClick={button.onClick}
                   variant={button.variant!}
+                  disabled={button.disabled}
                 >
                   {button.label}
                 </CustomButton>

@@ -1,7 +1,7 @@
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { useState, useRef, useId } from "react";
 import PixelatedCanvas from "./pixelated-canvas";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/ui/use-mobile";
 import { Play } from "lucide-react";
 import type { UploadedVideo } from "@shared/types/uploaded_video";
 import { useThemeStore } from "@/store/useThemeStore";
@@ -11,7 +11,9 @@ export interface SlideProps {
   index: number;
   current: number;
   handleSlideClick: (index: number) => void;
-  toTrigger: ((file: UploadedVideo, isMobile: boolean) => React.ReactNode) | null;
+  toTrigger:
+    | ((file: UploadedVideo, isMobile: boolean) => React.ReactNode)
+    | null;
   onTrigger?: (slide: UploadedVideo) => void;
   offTrigger?: (file?: UploadedVideo) => void;
   triggered: boolean;
@@ -171,7 +173,9 @@ const CarouselControl = ({
 
 interface CarouselProps {
   slides: UploadedVideo[];
-  toTrigger: ((file: UploadedVideo, isMobile: boolean) => React.ReactNode) | null;
+  toTrigger:
+    | ((file: UploadedVideo, isMobile: boolean) => React.ReactNode)
+    | null;
   onTrigger?: (file: UploadedVideo) => void;
   offTrigger?: (file?: UploadedVideo) => void;
   triggered: boolean;

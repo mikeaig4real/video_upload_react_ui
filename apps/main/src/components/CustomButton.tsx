@@ -1,17 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-
+export type CustomButtonProps = React.ComponentProps<typeof Button> & {
+  children?: React.ReactNode;
+  className?: string;
+  btnType?: "fill" | "outline";
+}
 const CustomButton = ({
   children = null,
   className = "",
   btnType = "outline",
   ...props
-}: React.ComponentProps<typeof Button> & {
-  children?: React.ReactNode;
-  className?: string;
-  btnType?: "fill" | "outline";
-}) => {
+}: CustomButtonProps) => {
   return (
     <Button
       className={cn(
