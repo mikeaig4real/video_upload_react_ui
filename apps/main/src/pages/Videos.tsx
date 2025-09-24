@@ -1,42 +1,58 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CustomHeader from "@/components/ui/custom-header";
 import VideoCards from "@/components/ui/video-cards";
-import { notify } from "@/utils/notify";
-import * as API from "@/api";
 import { filterVideosByStatus } from "@/utils/uploaded_videos";
-import { useEffect } from "react";
 import { Link } from "react-router";
-import type { UploadedVideo } from "@shared/types/uploaded_video";
-import { resolveUploadedVideos } from "@/utils/video_file";
-import { log } from "@/utils/logger";
 import { useVideoStore } from "@/store/useVideoStore";
+import { LoaderThree } from "@/components/ui/loader";
+import { useVideos } from "@/hooks/query/useVideos";
+import { normalizeError } from "@/utils/error";
+import { log } from "@/utils/logger";
+import { resolveUploadedVideos } from "@/utils/video_file";
+import { useEffect } from "react";
 
 const Videos = () => {
-  const { uploadedFiles, videoFilters, setUploadedFiles, isLoadingVideos, setIsLoadingVideos } = useVideoStore();
+  const { uploadedFiles, videoFilters, setUploadedFiles } = useVideoStore();
+  const {
+    data: { data: videos } = { data: [] },
+    isLoading,
+    error,
+  } = useVideos( videoFilters );
+  
+  log({
+    videos,
+    isLoading,
+    error,
+    uploadedFiles,
+    videoFilters,
+  });
+
+  useEffect(() => {
+    if (videos?.length) {
+      setUploadedFiles(resolveUploadedVideos(uploadedFiles, videos));
+    }
+  }, [videos]);
+
+
   const allowedVideos = filterVideosByStatus(uploadedFiles, [
     "completed",
     "processing",
     "uploading",
   ]);
-  useEffect(() => {
-    if (isLoadingVideos) return;
-    setIsLoadingVideos(true);
-    notify(API.VideoAPI.getVideos(videoFilters), {
-      success: ({ data }: { data: UploadedVideo[] }) => {
-        log(data);
-        setUploadedFiles( resolveUploadedVideos( uploadedFiles, data ) );
-        return data.length ? "Done" : "No videos...";
-      },
-      loading: "Loading..",
-      error: "Could not load",
-      finally: () => {
-        setIsLoadingVideos( false );
-      }
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoFilters]);
-  return allowedVideos.length ? (
-    <VideoCards videos={allowedVideos} />
-  ) : (
+
+  if (isLoading) {
+    return <CustomHeader header={<LoaderThree />} />;
+  }
+
+  if (error) {
+    return <CustomHeader header="Error" description={normalizeError(error)} />;
+  }
+
+  if (allowedVideos.length) {
+    return <VideoCards videos={allowedVideos} />;
+  }
+
+  return (
     <CustomHeader
       header="No videos uploaded/in-progress"
       description={
